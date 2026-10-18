@@ -1,0 +1,138 @@
+"use client";
+
+import { useState, useRef, JSX } from "react";
+
+import { RandomNumberArrayGenerator } from "../../../../lib/helpers";
+import ScreenCard from "../../../../components/sessionCard";
+import Dropdown from "../../../../components/dropdown";
+import Card from "../../../../components/card";
+
+import { Category, Vocabulary } from "../../../../types/vocabulary";
+
+type FillInProps = {
+    categories: Category[];
+    entries: Vocabulary[];
+};
+
+const FillIn = ({ categories, entries }: FillInProps) => {
+    const [showSession, setShowSession] = useState<boolean>(true);
+    const [category, setCategory] = useState<number>(0);
+    const [numberQuestions, setNumberQuestions] = useState<number>(0);
+    const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+    const [questionSet, setQuestionSet] = useState<Vocabulary[]>([]);
+    const [showAnswer, setShowAnswer] = useState<boolean>(false);
+    const [answerText, setAnswerText] = useState<JSX.Element | string>("");
+
+    const answerRef = useRef<HTMLInputElement>(null);
+
+    const handleCategoryChange = (newCategory: number) => {
+        setCategory(newCategory);
+    };
+
+    const handleSessionButtonClick = (
+        e?: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        const activeButton = e?.currentTarget;
+        setNumberQuestions(Number(activeButton?.name ?? 0));
+    };
+
+    const handlePracticeClick = () => {
+        const pool =
+            category === 0
+                ? entries
+                : entries.filter((entry) => entry.categoryId === category);
+
+        const count = Math.min(numberQuestions, pool.length);
+        const indexes = RandomNumberArrayGenerator(0, pool.length, count);
+
+        setQuestionSet(indexes.map((i: number) => pool[i]));
+        setCurrentQuestion(0);
+        setShowSession(false);
+    };
+
+    const handleExitSessionClick = () => {
+        setShowSession(true);
+        setQuestionSet([]);
+        setCurrentQuestion(0);
+    };
+
+    const handleCheckAnswerClick = () => {
+        const answer = answerRef.current?.value ?? "";
+        const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
+        const answerText = isCorrect ? "Correct!" : (<><p>Not quite!</p><p>The correct answer is: {current.wordText})</p></>);
+        setAnswerText(answerText);
+        setShowAnswer(true);
+    };
+
+    const handleNextClick = () => {
+        setShowAnswer(false);
+        setCurrentQuestion((prev) => (prev + 1));
+        answerRef.current!.value = "";
+        setAnswerText("");
+    };
+
+    const current = questionSet[currentQuestion];
+
+    return (
+        <>
+            { showSession ? (
+                    <ScreenCard
+                        onSessionButtonClick={handleSessionButtonClick}
+                        onPracticeClick={handlePracticeClick}
+                    >
+                        <Dropdown
+                            type="category"
+                            firstOption="All words"
+                            label="Category"
+                            options={categories}
+                            value={category}
+                            onChange={handleCategoryChange}
+                        />
+                    </ScreenCard>
+                ) : (
+                    <>
+                        <Card
+                            leftButtonLabel="Exit session"
+                            rightButtonLabel={showAnswer ? "Next" : "Check answer"}
+                            onLeftButtonClick={handleExitSessionClick}
+                            onRightButtonClick={showAnswer ? handleNextClick : handleCheckAnswerClick}
+                        >
+                            {
+                                questionSet.length >= numberQuestions && current ? (
+                                    <>
+                                        <h2 
+                                            className="text-[1.25rem] font-bold"
+                                            style={{ marginBottom: "10px" }}
+                                        >
+                                            {current.translation}
+                                        </h2>
+                                        <p
+                                            className="text-[#637789] text-[0.5rem]"
+                                            style={{ marginBottom: "15px" }}
+                                        >
+                                            Enter the Spanish answer
+                                        </p>
+                                        <input
+                                            type="text"
+                                            ref={answerRef}
+                                            id="answer"
+                                            name="answer"
+                                            placeholder="Type your answer"
+                                            className="w-full border-[0.5px] border-gray-300 rounded-[3px] bg-[#FFFAF2] text-[0.5rem]"
+                                            style={{ padding: "5px 8px", marginBottom: "15px" }}
+                                        />
+                                        {showAnswer && (
+                                            <div>{answerText}</div>
+                                        )}
+                                    </>
+                                ) : null
+                            }
+                        </Card>
+                    </>
+                )
+            }
+        </>
+    );
+};
+
+export default FillIn;
