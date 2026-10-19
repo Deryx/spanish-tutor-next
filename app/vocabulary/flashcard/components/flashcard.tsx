@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-import Dropdown from "../../../../components/dropdown";
-import Card from "../../../../components/card";
-import { Category, Vocabulary } from "../../../../types/vocabulary";
+import Dropdown from "@/components/dropdown";
+import Card from "@/components/card";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 type FlashcardProps = {
     categories: Category[];

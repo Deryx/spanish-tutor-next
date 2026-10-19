@@ -2,13 +2,13 @@
 
 import { useState, JSX } from "react";
 
-import { RandomNumberArrayGenerator } from "../../../../lib/helpers";
-import ScreenCard from "../../../../components/sessionCard";
-import Dropdown from "../../../../components/dropdown";
-import Card from "../../../../components/card";
+import { RandomNumberArrayGenerator } from "@/lib/helpers";
+import ScreenCard from "@/components/sessionCard";
+import Dropdown from "@/components/dropdown";
+import Card from "@/components/card";
 import AnswerButton from "../components/answerButton";
 
-import { Category, Vocabulary } from "../../../../types/vocabulary";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 type QuizProps = {
     categories: Category[];

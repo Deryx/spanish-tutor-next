@@ -1,6 +1,6 @@
 import Conjugator from "./components/conjugator";
-import { getDatabaseData } from "../../../lib/database";
-import { Tense, Verb } from "../../../types/verbs";
+import { getDatabaseData } from "@/lib/database";
+import { Tense, Verb } from "@/types/verbs";
 
 const ConjugatorPage = async () => {
   const [verbs, tenses] = await Promise.all([

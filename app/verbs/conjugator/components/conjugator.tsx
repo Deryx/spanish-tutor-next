@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, JSX } from "react";
 
-import Dropdown from "../../../../components/dropdown";
-import Card from "../../../../components/card";
+import Dropdown from "@/components/dropdown";
+import Card from "@/components/card";
 
-import { getConjugationSet } from "../../../../lib/database"
+import { getConjugationSet } from "@/lib/database"
 
-import { Tense, Verb, ConjugationSet } from "../../../../types/verbs";
+import { Tense, Verb, ConjugationSet } from "@/types/verbs";
 
 type ConjugatorProps = {
     tenses: Tense[];

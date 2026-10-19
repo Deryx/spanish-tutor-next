@@ -29,14 +29,14 @@ type SortableTileProps = {
     disabled: boolean;
 };
 
-import { RandomNumberArrayGenerator } from "../../../../lib/helpers";
-import ScreenCard from "../../../../components/sessionCard";
-import Dropdown from "../../../../components/dropdown";
-import Card from "../../../../components/card";
-import Tile from "../../../../components/tile";
-import SortableTile from "../../../../components/sortableTile"
+import { RandomNumberArrayGenerator } from "@/lib/helpers";
+import ScreenCard from "@/components/sessionCard";
+import Dropdown from "@/components/dropdown";
+import Card from "@/components/card";
+import Tile from "@/components/tile";
+import SortableTile from "@/components/sortableTile"
 
-import { Category, Vocabulary } from "../../../../types/vocabulary";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 type SliderProps = {
     categories: Category[];

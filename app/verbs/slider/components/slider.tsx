@@ -19,15 +19,15 @@ import {
     sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 
-import Dropdown from "../../../../components/dropdown";
-import Card from "../../../../components/card";
-import SortableTile from "../../../../components/sortableTile"
-import Tile from "../../../../components/tile";
+import Dropdown from "@/components/dropdown";
+import Card from "@/components/card";
+import SortableTile from "@/components/sortableTile"
+import Tile from "@/components/tile";
 
-import { getConjugationSet } from "../../../../lib/database";
+import { getConjugationSet } from "@/lib/database";
 
-import { Tense, Verb, ConjugationSet } from "../../../../types/verbs";
-import { RandomNumberArrayGenerator } from "../../../../lib/helpers"
+import { Tense, Verb, ConjugationSet } from "@/types/verbs";
+import { RandomNumberArrayGenerator } from "@/lib/helpers"
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 type SliderProps = {

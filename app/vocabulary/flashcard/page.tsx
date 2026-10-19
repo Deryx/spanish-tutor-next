@@ -1,6 +1,6 @@
 import Flashcard from "./components/flashcard";
-import { getDatabaseData } from "../../../lib/database";
-import { Category, Vocabulary } from "../../../types/vocabulary";
+import { getDatabaseData } from "@/lib/database";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 const FlashcardPage = async() => {
   const [categories, entries] = await Promise.all([

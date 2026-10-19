@@ -1,6 +1,6 @@
 import Fillin from './components/fill-in';
-import { getDatabaseData } from "../../../lib/database";
-import { Category, Vocabulary } from "../../../types/vocabulary";
+import { getDatabaseData } from "@/lib/database";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 const FillInPage = async() => {
   const [categories, entries] = await Promise.all([

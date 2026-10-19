@@ -1,6 +1,6 @@
 import Slider from "./components/slider";
-import { getDatabaseData } from "../../../lib/database";
-import { Tense, Verb } from "../../../types/verbs";
+import { getDatabaseData } from "@/lib/database";
+import { Tense, Verb } from "@/types/verbs";
 
 const SliderPage = async () => {
   const [verbs, tenses] = await Promise.all([

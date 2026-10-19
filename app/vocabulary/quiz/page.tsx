@@ -1,6 +1,6 @@
 import Quiz from './components/quiz';
-import { getDatabaseData } from "../../../lib/database";
-import { Category, Vocabulary } from "../../../types/vocabulary";
+import { getDatabaseData } from "@/lib/database";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 const QuizPage = async() => {
   const [categories, entries] = await Promise.all([

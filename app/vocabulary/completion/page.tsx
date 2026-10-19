@@ -1,6 +1,6 @@
 import Completion from "./components/completion";
-import { getDatabaseData } from "../../../lib/database";
-import { Category, Vocabulary } from "../../../types/vocabulary";
+import { getDatabaseData } from "@/lib/database";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 const CompletionPage = async() => {
   const [categories, entries] = await Promise.all([

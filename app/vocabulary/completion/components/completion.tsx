@@ -2,12 +2,12 @@
 
 import { useState, useRef, JSX } from "react";
 
-import { RandomNumberArrayGenerator } from "../../../../lib/helpers";
-import ScreenCard from "../../../../components/sessionCard";
-import Dropdown from "../../../../components/dropdown";
-import Card from "../../../../components/card";
+import { RandomNumberArrayGenerator } from "@/lib/helpers";
+import ScreenCard from "@/components/sessionCard";
+import Dropdown from "@/components/dropdown";
+import Card from "@/components/card";
 
-import { Category, Vocabulary } from "../../../../types/vocabulary";
+import { Category, Vocabulary } from "@/types/vocabulary";
 
 type CompletionProps = {
     categories: Category[];
