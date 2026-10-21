@@ -3,12 +3,11 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import React from "react";
 
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
+const plusJakartaSans = Plus_Jakarta_Sans({
+    subsets: ["latin"],
+    variable: "--font-plus-jakarta-sans",
+    display: "swap",
 });
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode}>) {
   return (
-    <html lang="en" className={`${font.variable} scroll-smooth`}>
+    <html lang="en" className={`${plusJakartaSans.variable} scroll-smooth`}>
       <body>{children}</body>
     </html>
   );
