@@ -23,6 +23,7 @@ import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
 import SortableTile from "@/components/sortableTile"
 import Tile from "@/components/tile";
+import SummaryCard from "@/components/summaryCard";
 
 import { getConjugationSet } from "@/lib/database";
 

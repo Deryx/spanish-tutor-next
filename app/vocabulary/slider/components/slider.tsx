@@ -35,6 +35,7 @@ import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
 import Tile from "@/components/tile";
 import SortableTile from "@/components/sortableTile"
+import SummaryCard from "@/components/summaryCard";
 
 import { Category, Vocabulary } from "@/types/vocabulary";
 
@@ -52,6 +53,7 @@ const Slider = ({ categories, entries }: SliderProps) => {
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [answerText, setAnswerText] = useState<JSX.Element | string>("");
     const [userAnswers, setUserAnswers] = useState<number[]>([]);
+    const [showResults, setShowResults] = useState<boolean>(false);
 
     const current = questionSet[currentQuestion];
 
@@ -106,6 +108,9 @@ const Slider = ({ categories, entries }: SliderProps) => {
         setShowSession(true);
         setQuestionSet([]);
         setCurrentQuestion(0);
+        setShowAnswer(false);
+        setShowResults(false);
+        setAnswerText("");
     };
 
     const handleCheckAnswerClick = () => {
@@ -146,6 +151,28 @@ const Slider = ({ categories, entries }: SliderProps) => {
         setUserAnswers(questionSet[next] ? shuffle(questionSet[next]) : []);
     };
 
+    const handleSeeResultsClick = () => {
+        setShowResults(true);
+    };
+
+    const isLastQuestion = currentQuestion === questionSet.length - 1;
+
+    let rightButtonLabel = "";
+    let rightButtonMethod = () => {};
+
+    if (currentQuestion < questionSet.length) {
+        if (!showAnswer) {
+            rightButtonLabel = "Check answer";
+            rightButtonMethod = handleCheckAnswerClick;
+        } else if (isLastQuestion) {
+            rightButtonLabel = "See results";
+            rightButtonMethod = handleSeeResultsClick;
+        } else {
+            rightButtonLabel = "Next";
+            rightButtonMethod = handleNextClick;
+        }
+    }
+
     return (
         <>
             { showSession ? (
@@ -162,13 +189,13 @@ const Slider = ({ categories, entries }: SliderProps) => {
                             onChange={handleCategoryChange}
                         />
                     </ScreenCard>
-                ) : (
+                ) : !showResults ? (
                     <>
                         <Card
                             leftButtonLabel="Exit session"
-                            rightButtonLabel="Check answer"
+                            rightButtonLabel={rightButtonLabel}
                             onLeftButtonClick={handleExitSessionClick}
-                            onRightButtonClick={showAnswer ? handleNextClick : handleCheckAnswerClick}
+                            onRightButtonClick={rightButtonMethod}
                         >
                             {
                                 current ? (
@@ -251,6 +278,10 @@ const Slider = ({ categories, entries }: SliderProps) => {
                             }
                         </Card>
                     </>
+                ) : (
+                    <SummaryCard>
+                        &nbsp;
+                    </SummaryCard>
                 )
             }
         </>

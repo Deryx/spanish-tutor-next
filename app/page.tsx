@@ -108,8 +108,8 @@ const HomePage = () => {
                 className="border-r border-[#84929f]"
                 style={{ paddingLeft: "5px" }}
               >
-                <p className="text-[1rem] font-bold">700+</p>
-                <p className="text-[0.4375rem] text-[#637789] font-semibold">WORDS</p>
+                <p className="text-[1rem] font-bold">1,000+</p>
+                <p className="text-[0.4375rem] text-[#637789] font-semibold">COMMON WORDS</p>
               </div>
               <div
                 style={{ paddingLeft: "5px" }}
@@ -258,7 +258,7 @@ const HomePage = () => {
               >
                 (B) VOCABULARY
               </a>
-              <h2 className="text-[1rem] font-bold">700+ words</h2>
+              <h2 className="text-[1rem] font-bold">1000+ words</h2>
             </div>
             <div>
               <p className="text-[0.4375rem] text-[#c9362b] font-semibold">&nbsp;</p>
@@ -280,7 +280,7 @@ const HomePage = () => {
               buttonText='01'
               title='Vocabulary flashcards'
               tagline='Build recognition with Spanish-to-English study cards.'
-              href='/vocabulary/flashcards'
+              href='/vocabulary/flashcard'
               hrefColor='black'
             />
 

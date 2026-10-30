@@ -6,6 +6,7 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
 import ScreenCard from "@/components/sessionCard";
 import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
+import SummaryCard from "@/components/summaryCard";
 
 import { Category, Vocabulary } from "@/types/vocabulary";
 
@@ -22,8 +23,10 @@ const FillIn = ({ categories, entries }: FillInProps) => {
     const [questionSet, setQuestionSet] = useState<Vocabulary[]>([]);
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [answerText, setAnswerText] = useState<JSX.Element | string>("");
+    const [showResults, setShowResults] = useState<boolean>(false);
 
     const answerRef = useRef<HTMLInputElement>(null);
+    let userAnswers: string[] = [];
 
     const handleCategoryChange = (newCategory: number) => {
         setCategory(newCategory);
@@ -58,6 +61,8 @@ const FillIn = ({ categories, entries }: FillInProps) => {
 
     const handleCheckAnswerClick = () => {
         const answer = answerRef.current?.value ?? "";
+        userAnswers = [...userAnswers, answer];
+
         const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
         const answerText = isCorrect ? "Correct!" : (<><p>Not quite!</p><p>The correct answer is: {current.wordText})</p></>);
         setAnswerText(answerText);
@@ -70,6 +75,28 @@ const FillIn = ({ categories, entries }: FillInProps) => {
         answerRef.current!.value = "";
         setAnswerText("");
     };
+
+    const handleSeeResultsClick = () => {
+        setShowResults(true);
+    };
+
+    const isLastQuestion = currentQuestion === questionSet.length - 1;
+
+    let rightButtonLabel = "";
+    let rightButtonMethod = () => {};
+
+    if (currentQuestion < questionSet.length) {
+        if (!showAnswer) {
+            rightButtonLabel = "Check answer";
+            rightButtonMethod = handleCheckAnswerClick;
+        } else if (isLastQuestion) {
+            rightButtonLabel = "See results";
+            rightButtonMethod = handleSeeResultsClick;
+        } else {
+            rightButtonLabel = "Next";
+            rightButtonMethod = handleNextClick;
+        }
+    }
 
     const current = questionSet[currentQuestion];
 
@@ -89,13 +116,13 @@ const FillIn = ({ categories, entries }: FillInProps) => {
                             onChange={handleCategoryChange}
                         />
                     </ScreenCard>
-                ) : (
+                ) : !showResults ? (
                     <>
                         <Card
                             leftButtonLabel="Exit session"
-                            rightButtonLabel={showAnswer ? "Next" : "Check answer"}
+                            rightButtonLabel={rightButtonLabel}
                             onLeftButtonClick={handleExitSessionClick}
-                            onRightButtonClick={showAnswer ? handleNextClick : handleCheckAnswerClick}
+                            onRightButtonClick={rightButtonMethod}
                         >
                             {
                                 questionSet.length >= numberQuestions && current ? (
@@ -129,6 +156,10 @@ const FillIn = ({ categories, entries }: FillInProps) => {
                             }
                         </Card>
                     </>
+                ) : (
+                    <SummaryCard>
+                        &nbsp;
+                    </SummaryCard>
                 )
             }
         </>
