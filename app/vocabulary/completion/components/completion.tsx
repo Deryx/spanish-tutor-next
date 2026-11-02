@@ -15,6 +15,12 @@ type CompletionProps = {
     entries: Vocabulary[];
 };
 
+type ResultsType = {
+    question: string;
+    answer: string;
+    userAnswer: string;
+}
+
 const incompleteWord = (word: string): string => {
     const numberLetters = Math.ceil(word.length / 2);
     const indexes = RandomNumberArrayGenerator(0, word.length - 1, numberLetters);
@@ -33,11 +39,11 @@ const Completion = ({ categories, entries }: CompletionProps) => {
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [showResults, setShowResults] = useState<boolean>(false);
     const [answerText, setAnswerText] = useState<JSX.Element | string>("");
+    const [results, setResults] = useState<ResultsType[]>([]);
+    const [numberCorrect, setNumberCorrect] = useState<number>(0);
     const [revealHint, setRevealHint] = useState<boolean>(false);
 
     const answerRef = useRef<HTMLInputElement>(null);
-    let questions: string[] = [];
-    let userAnswers: string[] = [];
 
     const handleCategoryChange = (newCategory: number) => {
         setCategory(newCategory);
@@ -76,8 +82,11 @@ const Completion = ({ categories, entries }: CompletionProps) => {
 
     const handleCheckAnswerClick = () => {
         const answer = answerRef.current?.value ?? "";
-        userAnswers = [...userAnswers, answer];
+
         const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
+        
+        if (isCorrect) setNumberCorrect(prev => prev + 1);
+        
         const answerText = isCorrect ? (
             <div
                 className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.5rem] font-bold"
@@ -95,6 +104,15 @@ const Completion = ({ categories, entries }: CompletionProps) => {
                 </p>
             </div>
         );
+
+        const row = {
+            question: maskedWord,
+            userAnswer: answer,
+            answer: current.wordText
+        }
+
+        setResults((prev) => [...prev, row]);
+
         setAnswerText(answerText);
         setShowAnswer(true);
     };
@@ -139,7 +157,6 @@ const Completion = ({ categories, entries }: CompletionProps) => {
         () => (current ? incompleteWord(current.wordText) : ""),
         [current]
     );
-    questions = [...questions, maskedWord];
 
     return (
         <>
@@ -215,8 +232,63 @@ const Completion = ({ categories, entries }: CompletionProps) => {
                             </Card>
                         </>
                 ) : (
-                    <SummaryCard>
-                        &nbsp;
+                    <SummaryCard
+                        practiceHref="#"
+                        chooseHref="/"
+                    >
+                        <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
+                        <h3 className="text-[0.8rem] font-bold">{numberCorrect} of {numberQuestions} correct</h3>
+                        <p
+                            className="text-gray-400 text-[0.5rem]"
+                            style={{ marginBottom: "10px" }}
+                        >
+                            Review the corrections, then take another pass.
+                        </p>
+
+                        <div>
+                            <table
+                                className="w-full text-[0.5rem] border-t-[0.5px] border-gray-300"
+                            >
+                                <tbody>
+                                    {
+                                        results.map((result) => (
+                                            <tr
+                                                key={result.question}
+                                                className="border-b-[0.5px] border-gray-300 h-9"
+                                            >
+                                                <td>
+                                                    <>
+                                                        <div className="text-gray-400 text-[0.375rem]">Prompt</div>
+                                                        <div className="font-bold">{result.question}</div>
+                                                    </>
+                                                </td>
+                                                <td>
+                                                    <>
+                                                        <div className="text-gray-400 text-[0.375rem]">Answer</div>
+                                                        {
+                                                            result.userAnswer === result.answer ? (
+                                                                <div className="text-[#29903B] font-bold">{result.answer}</div>
+                                                            ) : (
+                                                                <div className="text-[#C9362B] font-bold">{result.userAnswer} &#8594; {result.answer}</div>
+                                                            )
+                                                        }
+                                                    </>
+                                                </td>
+                                                <td className="font-bold">
+                                                    {
+                                                        result.userAnswer === result.answer ? (
+                                                            <span className="text-[#29903B]">&#10004;</span>
+                                                        ) : (
+                                                            <span className="text-[#C9362B]">&#10006;</span>
+                                                        )
+                                                    }
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </SummaryCard>
                 )
             }

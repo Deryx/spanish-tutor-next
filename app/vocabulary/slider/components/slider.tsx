@@ -44,6 +44,12 @@ type SliderProps = {
     entries: Vocabulary[];
 };
 
+type ResultsType = {
+    question: string[];
+    answer: string[];
+    userAnswer: string[];
+}
+
 const Slider = ({ categories, entries }: SliderProps) => {
     const [showSession, setShowSession] = useState<boolean>(true);
     const [category, setCategory] = useState<number>(0);
@@ -53,6 +59,9 @@ const Slider = ({ categories, entries }: SliderProps) => {
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [answerText, setAnswerText] = useState<JSX.Element | string>("");
     const [userAnswers, setUserAnswers] = useState<number[]>([]);
+    const [results, setResults] = useState<ResultsType[]>([]);
+    const [numberCorrect, setNumberCorrect] = useState<number[]>([]);
+    const [totalCorrect, setTotalCorrect] = useState<number>(0);
     const [showResults, setShowResults] = useState<boolean>(false);
 
     const current = questionSet[currentQuestion];
@@ -117,11 +126,15 @@ const Slider = ({ categories, entries }: SliderProps) => {
         const isCorrect = current.length === userAnswers.length && current.every((value, index) => value === userAnswers[index]);
 
         let numberCorrect = 0;
-        if (!isCorrect) {
-            for(let i = 0; i < current.length; i++) {
-                if (current[i] === userAnswers[i]) numberCorrect++
-            }
+        for(let i = 0; i < current.length; i++) {
+            if (current[i] === userAnswers[i]) numberCorrect++;
         }
+        setTotalCorrect((prev) => prev + numberCorrect);
+
+        setNumberCorrect((prev) => [...prev, numberCorrect]);
+
+        console.log(numberCorrect);
+
         const answerText = isCorrect ? (
             <div
                 className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.5rem] font-bold"
@@ -138,6 +151,27 @@ const Slider = ({ categories, entries }: SliderProps) => {
                 <p>{ numberCorrect } of { current.length } are in the correct position.</p>
             </div>
         );
+
+        let promptSet: string[] = [];
+        let answerSet: string[] = [];
+        current.forEach((entry) => {
+            promptSet = [...promptSet, filteredEntries[entry].translation];
+            answerSet = [...answerSet, filteredEntries[entry].wordText];
+        });
+
+        let userInput: string[] = [];
+        userAnswers.forEach((entry) => {
+            userInput = [...userInput, filteredEntries[entry].wordText];
+        });
+
+        const set = {
+            question: promptSet,
+            userAnswer: userInput,
+            answer: answerSet
+        };
+
+        setResults((prev) => [...prev, set]);
+
 
         setAnswerText(answerText);
         setShowAnswer(true);
@@ -172,6 +206,8 @@ const Slider = ({ categories, entries }: SliderProps) => {
             rightButtonMethod = handleNextClick;
         }
     }
+
+    console.log(results);
 
     return (
         <>
@@ -279,8 +315,62 @@ const Slider = ({ categories, entries }: SliderProps) => {
                         </Card>
                     </>
                 ) : (
-                    <SummaryCard>
-                        &nbsp;
+                    <SummaryCard
+                        practiceHref="#"
+                        chooseHref="/"
+                    >
+                        <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
+                        <h3 className="text-[0.8rem] font-bold">{totalCorrect} of {numberQuestions * 5} correct</h3>
+                        <p
+                            className="text-gray-400 text-[0.5rem]"
+                            style={{ marginBottom: "10px" }}
+                        >
+                            Review the corrections, then take another pass.
+                        </p>
+
+                        <div>
+                            <table
+                                className="w-full text-[0.5rem] border-t-[0.5px] border-gray-300"
+                            >
+                                <tbody>
+                                    {results.map((result, resultIndex) => (
+                                        <tr
+                                            key={`${result.question.join("-")}-${resultIndex}`}
+                                            className="w-full border-b-[0.5px] border-gray-300 h-38"
+                                        >
+                                            <td className="w-1/2">
+                                                <div className="font-bold">
+                                                    {result.question.map((prompt, promptIndex) => (
+                                                        <div style={{ marginBottom: "5px" }}>
+                                                            <div className="text-gray-400 text-[0.375rem]">Prompt</div>
+                                                            <div key={`${prompt}-${promptIndex}`}>{prompt}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                            <td className="w-1/2 font-bold">
+                                                {result.answer.map((answer, answerIndex) => {
+                                                    const userAnswer = result.userAnswer[answerIndex];
+                                                    const isCorrect = userAnswer === answer;
+
+                                                    return (
+                                                        <div style={{ marginBottom: "5px" }}>
+                                                            <div className="text-gray-400 text-[0.375rem]">Answer</div>
+                                                            <div
+                                                                key={`${answer}-${answerIndex}`}
+                                                                className={isCorrect ? "text-[#29903B] font-bold" : "text-[#C9362B] font-bold"}
+                                                            >
+                                                                {isCorrect ? answer : <span>{userAnswer} &#8594; {answer}</span>}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </SummaryCard>
                 )
             }

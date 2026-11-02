@@ -16,6 +16,12 @@ type QuizProps = {
     entries: Vocabulary[];
 };
 
+type ResultsType = {
+    question: string;
+    answer: string;
+    userAnswer: string;
+}
+
 const shuffle = <T,>(items: T[]): T[] => {
     const copy = [...items];
     for (let i = copy.length - 1; i > 0; i--) {
@@ -44,6 +50,8 @@ const Quiz = ({ categories, entries }: QuizProps) => {
     const [selectedAnswer, setSelectedAnswer] = useState<string>("");
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
     const [answerText, setAnswerText] = useState<JSX.Element | string>("");
+    const [results, setResults] = useState<ResultsType[]>([]);
+    const [numberCorrect, setNumberCorrect] = useState<number>(0);
     const [showResults, setShowResults] = useState<boolean>(false);
 
     let userAnswers: string[] = [];
@@ -86,9 +94,12 @@ const Quiz = ({ categories, entries }: QuizProps) => {
     };
 
     const handleCheckAnswerClick = () => {
+        const answer = selectedAnswer;
+
         const isCorrect = selectedAnswer === questionSet[currentQuestion].translation;
-        userAnswers = [...userAnswers, selectedAnswer];
-        
+
+        if (isCorrect) setNumberCorrect(prev => prev + 1);
+
         const answerText = isCorrect ? (
             <div
                 className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.5rem] font-bold"
@@ -106,6 +117,15 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                 </p>
             </div>
         );
+
+        const row = {
+            question: current.wordText,
+            userAnswer: answer,
+            answer: current.translation
+        }
+
+        setResults((prev) => [...prev, row]);
+
         setAnswerText(answerText);
         setShowAnswer(true);
     };
@@ -188,7 +208,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                                             ))}
                                         </div>
                                         {showAnswer && (
-                                            <p>{answerText}</p>
+                                            <div>{answerText}</div>
                                         )}
                                     </>
                                 ) : null
@@ -196,8 +216,63 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                         </Card>
                     </>
                 ) : (
-                    <SummaryCard>
-                        &nbsp;
+                    <SummaryCard
+                        practiceHref="#"
+                        chooseHref="/"
+                    >
+                        <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
+                        <h3 className="text-[0.8rem] font-bold">{numberCorrect} of {numberQuestions} correct</h3>
+                        <p
+                            className="text-gray-400 text-[0.5rem]"
+                            style={{ marginBottom: "10px" }}
+                        >
+                            Review the corrections, then take another pass.
+                        </p>
+
+                        <div>
+                            <table
+                                className="w-full text-[0.5rem] border-t-[0.5px] border-gray-300"
+                            >
+                                <tbody>
+                                    {
+                                        results.map((result) => (
+                                            <tr
+                                                key={result.question}
+                                                className="border-b-[0.5px] border-gray-300 h-9"
+                                            >
+                                                <td>
+                                                    <>
+                                                        <div className="text-gray-400 text-[0.375rem]">Prompt</div>
+                                                        <div className="font-bold">{result.question}</div>
+                                                    </>
+                                                </td>
+                                                <td>
+                                                    <>
+                                                        <div className="text-gray-400 text-[0.375rem]">Answer</div>
+                                                        {
+                                                            result.userAnswer === result.answer ? (
+                                                                <div className="text-[#29903B] font-bold">{result.answer}</div>
+                                                            ) : (
+                                                                <div className="text-[#C9362B] font-bold">{result.userAnswer} &#8594; {result.answer}</div>
+                                                            )
+                                                        }
+                                                    </>
+                                                </td>
+                                                <td className="font-bold">
+                                                    {
+                                                        result.userAnswer === result.answer ? (
+                                                            <span className="text-[#29903B]">&#10004;</span>
+                                                        ) : (
+                                                            <span className="text-[#C9362B]">&#10006;</span>
+                                                        )
+                                                    }
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </SummaryCard>
                 )
             }
