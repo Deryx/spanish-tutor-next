@@ -13,7 +13,7 @@ type OptionType = keyof OptionMap;
 type DropdownProps<K extends OptionType> = {
     id?: string;
     type: K;
-    label: string;
+    label?: string;
     options: OptionMap[K];
     firstOption?: string;
     value: number;
@@ -34,11 +34,11 @@ const Dropdown = <K extends OptionType>({
     const items = options as unknown as Record<string, string | number>[];
 
     return (
-        <label 
+        <label
             className="text-[0.45rem] flex flex-col font-semibold text-[#17324D]"
             style={{ marginBottom: "10px" }}
         >
-            {label}
+            {label ? label : null}
             <select
                 id={id}
                 value={value}
@@ -46,7 +46,7 @@ const Dropdown = <K extends OptionType>({
                 className="text-[#17324D] bg-[#FFFDF7] text-[0.45rem] border-[0.5px] border-gray-300 rounded-[3px] font-semibold"
                 style={{ padding: "5px 5px" }}
             >
-                {firstOption && <option value={0}>{firstOption}</option>}
+                {firstOption && <option value={0} disabled>{firstOption}</option>}
                 {items.map((item) => (
                     <option
                         key={item[idKey]}

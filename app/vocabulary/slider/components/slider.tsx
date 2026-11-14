@@ -129,11 +129,10 @@ const Slider = ({ categories, entries }: SliderProps) => {
         for(let i = 0; i < current.length; i++) {
             if (current[i] === userAnswers[i]) numberCorrect++;
         }
+
         setTotalCorrect((prev) => prev + numberCorrect);
 
         setNumberCorrect((prev) => [...prev, numberCorrect]);
-
-        console.log(numberCorrect);
 
         const answerText = isCorrect ? (
             <div
@@ -172,7 +171,6 @@ const Slider = ({ categories, entries }: SliderProps) => {
 
         setResults((prev) => [...prev, set]);
 
-
         setAnswerText(answerText);
         setShowAnswer(true);
     };
@@ -206,8 +204,6 @@ const Slider = ({ categories, entries }: SliderProps) => {
             rightButtonMethod = handleNextClick;
         }
     }
-
-    console.log(results);
 
     return (
         <>
