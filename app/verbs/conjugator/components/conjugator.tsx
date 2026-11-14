@@ -145,12 +145,10 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
         const currentCorrectAnswers = Object.values(correctAnswers[currentQuestion]);
         const userAnswerTexts = Object.values(userAnswers);
 
-        const isCorrect = currentCorrectAnswers.length === keys.length && currentCorrectAnswers.every((answers, index) => answers === userAnswerTexts[index]);
-
-        let numberCorrect = 0;
-        for(let i = 0; i < userAnswerTexts.length; i++) {
-            if (userAnswerTexts[i] === currentCorrectAnswers[i]) numberCorrect++;
-        }
+        const currentAnswer = correctAnswers[currentQuestion];
+        const norm = (s: string) => s.trim().toLowerCase();
+        const numberCorrect = keys.filter((k) => norm(userAnswers[k]) === norm(currentAnswer[k])).length;
+        const isCorrect = numberCorrect === keys.length;
 
         setTotalCorrect((prev) => prev + numberCorrect);
         setNumberCorrect((prev) => [...prev, numberCorrect]);
@@ -172,7 +170,6 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
             </div>
         );
 
-        const currentAnswer = correctAnswers[currentQuestion];
         const promptSet = [verbs[current].infinitive];
         const answerSet = keys.map((key) => currentAnswer[key]);
         const userInput = userAnswerTexts;
@@ -243,7 +240,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                         onRightButtonClick={rightButtonMethod}
                     >
                         <>
-                            {current && verbs[current].infinitive ? (
+                            {current !== undefined && verbs[current].infinitive ? (
                                 <>
                                     <p
                                         className="w-full flex justify-between place-items-center"
@@ -364,7 +361,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                         chooseHref="/"
                     >
                         <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
-                        <h3 className="text-[0.8rem] font-bold">{totalCorrect} of {numberQuestions * 5} correct</h3>
+                        <h3 className="text-[0.8rem] font-bold">{totalCorrect} of {questionSet.length * keys.length} correct</h3>
                         <p
                             className="text-gray-400 text-[0.5rem]"
                             style={{ marginBottom: "10px" }}
@@ -385,7 +382,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                             <td className="w-1/2">
                                                 <div className="font-bold">
                                                     {result.question.map((prompt, promptIndex) => (
-                                                        <div style={{ marginBottom: "5px" }}>
+                                                        <div key={`${prompt}-${promptIndex}`} style={{ marginBottom: "5px" }}>
                                                             <div className="text-gray-400 text-[0.375rem]">Verb</div>
                                                             <div key={`${prompt}-${promptIndex}`}>{prompt}</div>
                                                         </div>
@@ -398,7 +395,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                     const isCorrect = userAnswer === answer;
 
                                                     return (
-                                                        <div style={{ marginBottom: "5px" }}>
+                                                        <div key={`${answer}-${answerIndex}`} style={{ marginBottom: "5px" }}>
                                                             <div className="text-gray-400 text-[0.375rem]">{keys[answerIndex]}</div>
                                                             <div
                                                                 key={`${answer}-${answerIndex}`}
