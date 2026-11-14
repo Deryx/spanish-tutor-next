@@ -83,6 +83,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
     const numberConjugations = 6;
 
     const current = questionSet[currentQuestion];
+    const currentTense = tenses.find((tense) => tense.tenseId === selectedTense)?.tenseText;
 
     const tiles = userAnswers[currentQuestion] ?? [];
 
@@ -167,6 +168,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
         setShowAnswer(false);
         setShowResults(false);
         setAnswerText("");
+        setSelectedTense(0);
     };
 
     const handleCheckAnswerClick = () => {
@@ -296,12 +298,21 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                             Drag the Spanish tiles up or down until each one sits beside its match.
                                         </p>
 
-                                        <div style={{ marginBottom: "10px" }}>
+                                        <div
+                                            className="flex items-center justify-between space-x-2"
+                                            style={{ marginBottom: "10px" }}
+                                        >
                                             <span
                                                 className="bg-[#000000] text-[#FFF8E8] rounded-[3px]"
                                                 style={{ padding: "5px 6px" }}
                                             >
                                                 {verbs[current].infinitive}
+                                            </span>
+                                            <span
+                                                className="bg-[#F2B441] text-[#000000] text-[0.4375rem] font-bold rounded-[3px]"
+                                                style={{ padding: "3px 6px" }}
+                                            >
+                                                {currentTense}
                                             </span>
                                         </div>
 
