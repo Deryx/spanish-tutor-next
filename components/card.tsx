@@ -16,8 +16,7 @@ const Card = ({
 
     return (
         <div
-            className="w-3/5 border-[0.5px] border-gray-300 bg-[#FFFDF7]"
-            style={{ padding: "15px", margin: "0 auto" }}
+            className="p-4 w-full md:m-auto lg:m-auto md:w-3/5 lg:w-3/5 border-[0.5px] border-gray-300 bg-[#FFFDF7]"
         >
             {children}
 

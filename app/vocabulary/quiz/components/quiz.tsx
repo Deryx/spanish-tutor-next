@@ -196,8 +196,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                                             Choose the matching answer.
                                             </p>
                                         <div
-                                            className="grid grid-cols-2 gap-1"
-                                            style={{ marginBottom: "15px" }}
+                                            className="grid grid-cols-1 gap-3 mb-6 lg:grid-cols-2 lg:gap-1"
                                         >
                                             {answerSet[currentQuestion]?.map((answer) => (
                                                 <AnswerButton

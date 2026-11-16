@@ -11,15 +11,14 @@ const ConjugatorPage = async () => {
   return (
     <>
       <section
-        className="border-y-[0.5px] border-gray-300"
-        style={{ padding: "15px 0" }}
+        className="p-4 border-y-[0.5px] border-gray-300"
       >
         <p className="text-[#c9362b] text-[0.375rem] font-bold">VERB · RECALL</p>
         <h1 className="text-[1rem] font-bold">Conjugator</h1>
         <p className="text-[0.5rem] text-[#637789]">Write the form that belongs with each pronoun.</p>
       </section>
 
-      <div style={{ padding: "15px 0" }}>
+      <div className="p-4">
         <Conjugator
           tenses={tenses}
           verbs={verbs}

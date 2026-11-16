@@ -11,15 +11,14 @@ const FillInPage = async() => {
   return (
     <>
       <section
-        className="border-y-[0.5px] border-gray-300"
-        style={{ padding: "15px 0" }}
+        className="p-4 border-y-[0.5px] border-gray-300"
       >
         <p className="text-[#c9362b] text-[0.375rem] font-bold">VOCABULARY · RECALL</p>
         <h1 className="text-[1rem] font-bold">Fill-in</h1>
         <p className="text-[0.5rem] text-[#637789]">Translate each English prompt into Spanish.</p>
       </section>
 
-      <div style={{ paddingTop: "15px" }}>
+      <div className="p-4">
         <Fillin
           categories={categories}
           entries={entries}

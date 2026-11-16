@@ -4,10 +4,9 @@ const VocabularyLayout = ({
     children
 }: React.PropsWithChildren) => {
     return (
-        <div className="flex flex-col w-3/5 bg-[#fff8eb] text-black">
+        <div className="w-full flex flex-col md:w-3/5 lg:w-3/5 md:m-0 md:m-auto lg:m-0 lg:m-auto text-black h-full bg-[#FFF8EB]">
             <header
-                className="w-full flex place-items-center justify-between"
-                style={{ padding: "8px 0"}}
+                className="p-4 w-full flex place-items-center justify-between"
             >
                 <Logo />
                 <div

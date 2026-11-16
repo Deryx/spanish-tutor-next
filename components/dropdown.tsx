@@ -35,16 +35,14 @@ const Dropdown = <K extends OptionType>({
 
     return (
         <label
-            className="text-[0.45rem] flex flex-col font-semibold text-[#17324D]"
-            style={{ marginBottom: "10px" }}
+            className="mb-2 w-full text-[0.45rem] flex flex-col font-semibold text-[#17324D]"
         >
             {label ? label : null}
             <select
                 id={id}
                 value={value}
                 onChange={(e) => onChange(Number(e.target.value))}
-                className="text-[#17324D] bg-[#FFFDF7] text-[0.45rem] border-[0.5px] border-gray-300 rounded-[3px] font-semibold"
-                style={{ padding: "5px 5px" }}
+                className="p-1 text-[#17324D] bg-[#FFFDF7] text-[0.45rem] border-[0.5px] border-gray-300 rounded-[3px] font-semibold"
             >
                 {firstOption && <option value={0} disabled>{firstOption}</option>}
                 {items.map((item) => (

@@ -11,15 +11,14 @@ const ScramblePage = async() => {
   return (
     <>
       <section
-        className="border-y-[0.5px] border-gray-300"
-        style={{ padding: "15px 0" }}
+        className="p-4 border-y-[0.5px] border-gray-300"
       >
         <p className="text-[#c9362b] text-[0.375rem] font-bold">VOCABULARY · SPELLING</p>
         <h1 className="text-[1rem] font-bold">Scramble</h1>
         <p className="text-[0.5rem] text-[#637789]">Put the shuffled letters back in the right order.</p>
       </section>
 
-      <div style={{ paddingTop: "15px" }}>
+      <div className="p-4">
         <Scramble
           categories={categories}
           entries={entries}

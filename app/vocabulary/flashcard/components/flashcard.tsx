@@ -44,8 +44,7 @@ const Flashcard = ({ categories, entries }: FlashcardProps ) => {
   return (
     <>
       <div
-        className="w-3/5 flex place-items-center"
-        style={{ margin: "0 auto" }}
+        className="w-full lg:w-3/5 flex place-items-center"
       >
         <Dropdown
           type="category"

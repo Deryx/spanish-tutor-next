@@ -9,8 +9,7 @@ type SessionCardProps = {
 const SessionCard = ({ children, onPracticeClick, onSessionButtonClick }: SessionCardProps) => {
     return (
         <section
-            className="w-1/2 flex flex-col border-[0.5px] border-gray-300 bg-[#FFFDF7]"
-            style={{ padding: "15px", margin: "0 auto" }}
+            className="p-4 w-full md:m-auto lg:m-auto md:w-1/2 lg:w-1/2 flex flex-col border-[0.5px] border-gray-300 bg-[#FFFDF7]"
         >
             <h2
                 className="text-[0.75rem] font-bold"

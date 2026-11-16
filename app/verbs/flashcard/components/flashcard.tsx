@@ -47,10 +47,10 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
 
     return (
         <>
-            <div className="w-full flex">
+            <div className="w-full h-full">
                 <aside
-                    className="w-1/4"
-                    style={{ marginRight: "20px" }}>
+                    className="w-full md:w-3/4 lg:w-3/4 md:m-auto lg:m-auto"
+                >
                     <div>
                         <Dropdown
                             id="verb"
@@ -74,8 +74,7 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
                     </div>
                 </aside>
                 <div
-                    className="w-3/4 border-[0.5px] border-gray-300 bg-[#FFFDF7]"
-                    style={{ padding: "20px" }}
+                    className="p-4 w-full md:m-auto lg:m-auto md:w-3/4 lg:w-3/4 border-[0.5px] border-gray-300 bg-[#FFFDF7]"
                 >
                     <section
                         className="w-full flex justify-between"
@@ -97,7 +96,7 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
                         {
                             currentConjugations ? (
                                 <ul
-                                    className="grid grid-cols-2 gap-1 text-[0.5rem]"
+                                    className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-1 text-[0.5rem]"
                                 >
                                     <li
                                         className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px]"
