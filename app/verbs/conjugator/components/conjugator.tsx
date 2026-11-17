@@ -222,6 +222,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                     <ScreenCard
                         onSessionButtonClick={handleSessionButtonClick}
                         onPracticeClick={handlePracticeClick}
+                        sessionSelected={numberQuestions.toString()}
                     >
                         <Dropdown
                             id="tense"

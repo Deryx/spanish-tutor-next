@@ -211,6 +211,7 @@ const Slider = ({ categories, entries }: SliderProps) => {
                     <ScreenCard
                         onSessionButtonClick={handleSessionButtonClick}
                         onPracticeClick={handlePracticeClick}
+                        sessionSelected={numberQuestions.toString()}
                     >
                         <Dropdown
                             type="category"

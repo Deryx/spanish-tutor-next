@@ -259,6 +259,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                     <ScreenCard
                         onSessionButtonClick={handleSessionButtonClick}
                         onPracticeClick={handlePracticeClick}
+                        sessionSelected={numberQuestions.toString()}
                     >
                         <Dropdown
                             id="tense"

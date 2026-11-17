@@ -1,12 +1,15 @@
+"use client";
+
 import SessionButton from "./sessionButton";
 
 type SessionCardProps = {
     children: React.ReactNode;
     onSessionButtonClick: () => void;
     onPracticeClick: () => void;
+    sessionSelected: string;
 };
 
-const SessionCard = ({ children, onPracticeClick, onSessionButtonClick }: SessionCardProps) => {
+const SessionCard = ({ children, onPracticeClick, onSessionButtonClick, sessionSelected }: SessionCardProps) => {
     return (
         <section
             className="p-4 w-full md:m-auto lg:m-auto md:w-1/2 lg:w-1/2 flex flex-col border-[0.5px] border-gray-300 bg-[#FFFDF7]"
@@ -30,18 +33,22 @@ const SessionCard = ({ children, onPracticeClick, onSessionButtonClick }: Sessio
                     <SessionButton
                         label="5"
                         onClick={onSessionButtonClick}
+                        sessionSelected={sessionSelected}
                     />
                     <SessionButton
                         label="10"
                         onClick={onSessionButtonClick}
+                        sessionSelected={sessionSelected}
                     />
                     <SessionButton
                         label="15"
                         onClick={onSessionButtonClick}
+                        sessionSelected={sessionSelected}
                     />
                     <SessionButton
                         label="20"
                         onClick={onSessionButtonClick}
+                        sessionSelected={sessionSelected}
                     />
                 </div>
             </div>

@@ -166,6 +166,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                     <ScreenCard
                         onSessionButtonClick={handleSessionButtonClick}
                         onPracticeClick={handlePracticeClick}
+                        sessionSelected={numberQuestions.toString()}
                     >
                         <Dropdown
                             type="category"

@@ -72,7 +72,7 @@ const HomePage = () => {
               <a
                 href="#Verbs"
                 className="bg-[#17324D] text-[0.45rem] font-semibold rounded-[3px]"
-                style={{ 
+                style={{
                   padding: "6px 8px",
                   color: "#fff8eb"
                 }}
