@@ -49,7 +49,7 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
         <>
             <div className="w-full h-full">
                 <aside
-                    className="w-full md:w-3/4 lg:w-3/4 md:m-auto lg:m-auto"
+                    className="w-full md:w-3/5 lg:w-3/5 md:m-auto lg:m-auto"
                 >
                     <div>
                         <Dropdown
@@ -74,19 +74,17 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
                     </div>
                 </aside>
                 <div
-                    className="p-4 w-full md:m-auto lg:m-auto md:w-3/4 lg:w-3/4 border-[0.5px] border-gray-300 bg-[#FFFDF7]"
+                    className="p-4 w-full md:m-auto lg:m-auto md:w-3/5 lg:w-3/5 border-[0.5px] border-gray-300 bg-[#FFFDF7]"
                 >
                     <section
-                        className="w-full flex justify-between"
-                        style={{ marginBottom: "15px" }}
+                        className="w-full flex justify-between mb-4 md:mb-6 lg:mb-6"
                     >
                         <div>
-                            <h2 className="text-[1.25rem] font-bold">{currentVerb?.infinitive}</h2>
-                            <p className="text-[#637789] text-[0.625rem]">{currentVerb?.translation}</p>
+                            <h2 className="text-[2.25rem] font-bold">{currentVerb?.infinitive}</h2>
+                            <p className="text-[#637789] text-[1.25rem]">{currentVerb?.translation}</p>
                         </div>
                         <div
-                            className="flex place-items-center h-3 text-[0.4375rem] bg-[#f2b441] font-semibold rounded-[3px]"
-                            style={{ padding: "0 8px"}}
+                            className="flex place-items-center h-3 text-[1rem] bg-[#f2b441] font-semibold rounded-[6px] py-4 px-6"
                         >
                             { currentTense }
                         </div>
@@ -96,41 +94,35 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
                         {
                             currentConjugations ? (
                                 <ul
-                                    className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-1 text-[0.5rem]"
+                                    className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-3 text-[1.1rem]"
                                 >
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px]"
-                                        style={{ padding: "10px" }}
+                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
                                         <span>Yo</span> <span className="font-bold">{currentConjugations.yo}</span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px]"
-                                        style={{ padding: "10px" }}
+                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
                                         <span>Tú</span> <span className="font-bold">{currentConjugations.tu}</span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px]"
-                                        style={{ padding: "10px" }}
+                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
                                         <span>Él/Ella/Usted</span> <span className="font-bold">{currentConjugations.el}</span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px]"
-                                        style={{ padding: "10px" }}
+                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
                                         <span>Nosotros/Nosotras</span> <span className="font-bold">{currentConjugations.nosotros}</span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px]"
-                                        style={{ padding: "10px" }}
+                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
                                         <span>Vosotros/Vosotras</span> <span className="font-bold">{currentConjugations.vosotros}</span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px]"
-                                        style={{ padding: "10px" }}
+                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
                                         <span>Ellos/Ellas/Ustedes</span> <span className="font-bold">{currentConjugations.ellos}</span>
                                     </li>

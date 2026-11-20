@@ -13,9 +13,9 @@ const CompletionPage = async() => {
       <section
         className="p-4 border-y-[0.5px] border-gray-300"
       >
-        <p className="text-[#c9362b] text-[0.375rem] font-bold">VERB · SPELLING</p>
-        <h1 className="text-[1rem] font-bold">Completion</h1>
-        <p className="text-[0.5rem] text-[#637789]">Restore the letters missing from each Spanish word.</p>
+        <p className="text-[#c9362b] text-[1.25rem] font-bold">VERB · SPELLING</p>
+        <h1 className="text-[2.25rem] font-bold">Completion</h1>
+        <p className="text-[1.25rem] text-[#637789]">Restore the letters missing from each Spanish word.</p>
       </section>
 
       <div className="p-4">

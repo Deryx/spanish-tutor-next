@@ -244,19 +244,16 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                             {current !== undefined && verbs[current].infinitive ? (
                                 <>
                                     <p
-                                        className="w-full flex justify-between place-items-center"
-                                        style={{ marginBottom: "10px" }}
+                                        className="w-full flex justify-between place-items-center mb-10 text-[1.25rem]"
                                     >
                                         <span
-                                            className="text-[0.5rem] text-[#FFF8EB] bg-[#000000] rounded-[3px] font-bold"
-                                            style={{ padding: "5px 6px" }}
+                                            className="text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] text-[#FFF8EB] bg-[#000000] rounded-[6px] font-bold py-2 px-4"
                                         >
                                             {verbs[current].infinitive}
                                         </span>
 
                                         <span
-                                            className="text-[0.4375rem] bg-[#F2B441] rounded-[3px] font-bold"
-                                            style={{ padding: "3px 6px" }}
+                                            className="text-[0.75rem] md:text-[1rem] lg:text-[1rem] bg-[#F2B441] rounded-[6px] font-bold py-2 px-4"
                                         >
                                             {tenses.find((tense) => tense.tenseId === selectedTense)?.tenseText}
                                         </span>
@@ -264,8 +261,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
 
                                     <ul className="w-full">
                                         <li
-                                            className= "flex justify-between text-[0.5rem] w-full"
-                                            style={{ marginBottom: "5px" }}
+                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Yo</span>
                                             <input
@@ -273,13 +269,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="yo"
                                                 value={userAnswers.yo}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] font-[0.4375rem] font-bold w-2/3"
-                                                style={{ fontSize: '0.5rem', padding: "5px" }}
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.5rem] w-full"
-                                            style={{ marginBottom: "5px" }}
+                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Tu</span>
                                             <input
@@ -287,13 +281,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="tu"
                                                 value={userAnswers.tu}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] text-[0.5rem] font-bold w-2/3"
-                                                style={{ padding: "5px" }}
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.5rem] w-full"
-                                            style={{ marginBottom: "5px" }}
+                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Él/Ella/Usted</span>
                                             <input
@@ -301,13 +293,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="el"
                                                 value={userAnswers.el}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] text-[0.5rem] font-bold w-2/3"
-                                                style={{ padding: "5px" }}
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.5rem] w-full"
-                                            style={{ marginBottom: "5px" }}
+                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Nosotros/Nosotras</span>
                                             <input
@@ -315,13 +305,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="nosotros"
                                                 value={userAnswers.nosotros}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] text-[0.5rem] font-bold w-2/3"
-                                                style={{ padding: "5px" }}
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.5rem] w-full"
-                                            style={{ marginBottom: "5px" }}
+                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Vosotros/Vosotras</span>
                                             <input
@@ -329,13 +317,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="vosotros"
                                                 value={userAnswers.vosotros}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] text-[0.5rem] font-bold w-2/3"
-                                                style={{ padding: "5px" }}
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.5rem] w-full"
-                                            style={{ marginBottom: "20px" }}
+                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Ellos/Ellas/Ustedes</span>
                                             <input
@@ -343,8 +329,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="ellos"
                                                 value={userAnswers.ellos}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] text-[0.5rem] font-bold w-2/3"
-                                                style={{ padding: "5px" }}
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-1 px-2 w-2/3"
                                             />
                                         </li>
                                     </ul>
@@ -361,18 +346,17 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                         practiceHref="#"
                         chooseHref="/"
                     >
-                        <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
-                        <h3 className="text-[0.8rem] font-bold">{totalCorrect} of {questionSet.length * keys.length} correct</h3>
+                        <p className="text-[1rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
+                        <h3 className="text-[1.6rem] font-bold">{totalCorrect} of {questionSet.length * keys.length} correct</h3>
                         <p
-                            className="text-gray-400 text-[0.5rem]"
-                            style={{ marginBottom: "10px" }}
+                            className="text-gray-400 text-[1rem] "
                         >
                             Review the corrections, then take another pass.
                         </p>
 
                         <div>
                             <table
-                                className="w-full text-[0.5rem] border-t-[0.5px] border-gray-300"
+                                className="w-full text-[1.25rem] border-t-[0.5px] border-gray-300"
                             >
                                 <tbody>
                                     {results.map((result, resultIndex) => (
@@ -384,7 +368,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 <div className="font-bold">
                                                     {result.question.map((prompt, promptIndex) => (
                                                         <div key={`${prompt}-${promptIndex}`} style={{ marginBottom: "5px" }}>
-                                                            <div className="text-gray-400 text-[0.375rem]">Verb</div>
+                                                            <div className="text-gray-400 text-[1rem]">Verb</div>
                                                             <div key={`${prompt}-${promptIndex}`}>{prompt}</div>
                                                         </div>
                                                     ))}
@@ -396,8 +380,8 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                     const isCorrect = userAnswer === answer;
 
                                                     return (
-                                                        <div key={`${answer}-${answerIndex}`} style={{ marginBottom: "5px" }}>
-                                                            <div className="text-gray-400 text-[0.375rem]">{keys[answerIndex]}</div>
+                                                        <div key={`${answer}-${answerIndex}`} className="mt-4 mb-4">
+                                                            <div className="text-gray-400 text-[1rem]">{keys[answerIndex]}</div>
                                                             <div
                                                                 key={`${answer}-${answerIndex}`}
                                                                 className={isCorrect ? "text-[#29903B] font-bold" : "text-[#C9362B] font-bold"}

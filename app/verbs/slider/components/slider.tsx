@@ -282,52 +282,44 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                 current ? (
                                     <>
                                         <p
-                                            className="text-[#C9362B] text-[0.375rem] font-bold"
+                                            className="text-[#C9362B] text-[0.8rem] font-bold"
                                         >
                                             SPANISH ENGLISH
                                         </p>
                                         <h2
-                                            className="text-[1rem] font-bold"
-                                            style={{ marginBottom: "5px" }}
+                                            className="text-[2rem] font-bold mb-2"
                                         >
                                             Arrange the matches
                                         </h2>
                                         <p
-                                            className="text-[0.5rem] text-[#637789]"
-                                            style={{ marginBottom: "10px" }}
+                                            className="text-[1rem] text-[#637789] mb-4"
                                         >
                                             Drag the Spanish tiles up or down until each one sits beside its match.
                                         </p>
 
                                         <div
-                                            className="flex items-center justify-between space-x-2"
-                                            style={{ marginBottom: "10px" }}
+                                            className="flex items-center justify-between space-x-2 mb-4"
                                         >
                                             <span
-                                                className="bg-[#000000] text-[#FFF8E8] rounded-[3px]"
-                                                style={{ padding: "5px 6px" }}
+                                                className="bg-[#000000] text-[#FFF8E8] text-[2rem] font-bold rounded-[6px] py-2 px-4"
                                             >
                                                 {verbs[current].infinitive}
                                             </span>
                                             <span
-                                                className="bg-[#F2B441] text-[#000000] text-[0.4375rem] font-bold rounded-[3px]"
-                                                style={{ padding: "3px 6px" }}
+                                                className="bg-[#F2B441] text-[#000000] text-[1rem] rounded-[6px] py-1 px-4"
                                             >
                                                 {currentTense}
                                             </span>
                                         </div>
 
                                         <div
-                                            className="w-full flex justify-between"
-                                            style={{ marginBottom: "10px" }}
+                                            className="w-full flex justify-between mb-4"
                                         >
                                             <section
-                                                className="w-1/2"
-                                                style={{ marginRight: "5px" }}
+                                                className="w-1/2 mr-2"
                                             >
                                                 <h3
-                                                    className="text-[0.4rem] text-[#637789] font-semibold"
-                                                    style={{ marginBottom: "5px" }}
+                                                    className="text-[1rem] text-[#637789] font-semibold mb-3"
                                                 >
                                                     PRONOUN
                                                 </h3>
@@ -359,8 +351,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
 
                                             <section className="w-1/2" style={{ marginLeft: "5px" }}>
                                                 <h3
-                                                    className="text-[0.4rem] text-[#637789] font-semibold"
-                                                    style={{ marginBottom: "5px" }}
+                                                    className="text-[1rem] text-[#637789] font-semibold mb-3"
                                                 >
                                                     SPANISH
                                                 </h3>
@@ -397,18 +388,17 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                         practiceHref="#"
                         chooseHref="/"
                     >
-                        <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
-                        <h3 className="text-[0.8rem] font-bold">{totalCorrect} of {numberQuestions * 5} correct</h3>
+                        <p className="text-[1rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
+                        <h3 className="text-[1.6rem] font-bold">{totalCorrect} of {numberQuestions * 5} correct</h3>
                         <p
-                            className="text-gray-400 text-[0.5rem]"
-                            style={{ marginBottom: "10px" }}
+                            className="text-gray-400 text-[1rem] mb-4"
                         >
                             Review the corrections, then take another pass.
                         </p>
 
                         <div>
                             <table
-                                className="w-full text-[0.5rem] border-t-[0.5px] border-gray-300"
+                                className="w-full text-[1.25rem] border-t-[0.5px] border-gray-300"
                             >
                                 <tbody>
                                     {results.map((result, resultIndex) => (
@@ -417,10 +407,10 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                             className="w-full border-b-[0.5px] border-gray-300 h-38"
                                         >
                                             <td className="w-1/2">
-                                                <div className="font-bold">
+                                                <div className="font-bold text-[1rem]">
                                                     {result.question.map((prompt, promptIndex) => (
-                                                        <div style={{ marginBottom: "5px" }}>
-                                                            <div className="text-gray-400 text-[0.375rem]">Verb</div>
+                                                        <div className="mb-4">
+                                                            <div className="text-gray-400">Verb</div>
                                                             <div key={`${prompt}-${promptIndex}`}>{prompt}</div>
                                                         </div>
                                                     ))}
@@ -432,8 +422,8 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                                     const isCorrect = userAnswer === answer;
 
                                                     return (
-                                                        <div style={{ marginBottom: "5px" }}>
-                                                            <div className="text-gray-400 text-[0.375rem]">{keys[answerIndex]}</div>
+                                                        <div className="mt-4 mb-4 text-[1rem]">
+                                                            <div className="text-gray-400">{keys[answerIndex]}</div>
                                                             <div
                                                                 key={`${answer}-${answerIndex}`}
                                                                 className={isCorrect ? "text-[#29903B] font-bold" : "text-[#C9362B] font-bold"}

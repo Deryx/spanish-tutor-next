@@ -84,9 +84,9 @@ const Completion = ({ categories, entries }: CompletionProps) => {
         const answer = answerRef.current?.value ?? "";
 
         const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
-        
+
         if (isCorrect) setNumberCorrect(prev => prev + 1);
-        
+
         const answerText = isCorrect ? (
             <div
                 className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.5rem] font-bold"
@@ -188,8 +188,7 @@ const Completion = ({ categories, entries }: CompletionProps) => {
                                         <>
                                             <h2 style={{ marginBottom: "5px" }}>
                                                 <span
-                                                    className="text-[1.25rem] font-bold tracking-[1.5px] bg-[#000000] text-[#FFF8EB] rounded-[3px]"
-                                                    style={{ padding: "5px 8px" }}
+                                                    className="text-[2.5rem] font-bold tracking-[1.5px] bg-[#000000] text-[#FFF8EB] rounded-[6px] py-2 px-4"
                                                 >
                                                         {maskedWord}
                                                 </span>
@@ -198,20 +197,18 @@ const Completion = ({ categories, entries }: CompletionProps) => {
                                                 !revealHint ? (
                                                 <button
                                                     onClick={handleRevealHint}
-                                                    className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] text-[0.4375rem]"
-                                                    style={{ padding: "5px 8px", marginBottom: "25px" }}
+                                                    className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[1rem] py-2 px-4 mt-4 mb-4 font-bold text-[#000000]"
                                                 >
                                                     Hint
                                                 </button>
                                                 ) : <p
-                                                    className="text-[#637789] text-[0.75rem] font-bold"
-                                                    style={{ marginBottom: "5px" }}>
+                                                        className="text-[#637789] text-[1.25rem] font-bold mt-4 mb-4"
+                                                    >
                                                         {current.translation}
                                                     </p>
                                             }
                                             <p
-                                                className="text-[#637789] text-[0.5rem]"
-                                                style={{ marginBottom: "15px" }}
+                                                className="text-[#637789] text-[1.25rem] mb-4"
                                             >
                                                 Type the complete Spanish word.
                                             </p>
@@ -221,8 +218,7 @@ const Completion = ({ categories, entries }: CompletionProps) => {
                                                 id="answer"
                                                 name="answer"
                                                 placeholder="Type your answer"
-                                                className="w-full border-[0.5px] border-gray-300 rounded-[3px] bg-[#FFFAF2] text-[0.5rem]"
-                                                style={{ padding: "5px 8px", marginBottom: "15px" }}
+                                                className="w-full border-[0.5px] border-gray-300 py-2 px-4 mb-4 rounded-[6px] bg-[#FFFAF2] text-[1.25rem]"
                                             />
                                             {showAnswer && (
                                                 <div>{answerText}</div>
@@ -237,18 +233,17 @@ const Completion = ({ categories, entries }: CompletionProps) => {
                         practiceHref="#"
                         chooseHref="/"
                     >
-                        <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
-                        <h3 className="text-[0.8rem] font-bold">{numberCorrect} of {numberQuestions} correct</h3>
+                        <p className="text-[1rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
+                        <h3 className="text-[1.6rem] font-bold">{numberCorrect} of {numberQuestions} correct</h3>
                         <p
-                            className="text-gray-400 text-[0.5rem]"
-                            style={{ marginBottom: "10px" }}
+                            className="text-gray-400 text-[1rem] mb-4"
                         >
                             Review the corrections, then take another pass.
                         </p>
 
                         <div>
                             <table
-                                className="w-full text-[0.5rem] border-t-[0.5px] border-gray-300"
+                                className="w-full text-[1.25rem] border-t-[0.5px] border-gray-300"
                             >
                                 <tbody>
                                     {
@@ -258,14 +253,14 @@ const Completion = ({ categories, entries }: CompletionProps) => {
                                                 className="border-b-[0.5px] border-gray-300 h-9"
                                             >
                                                 <td>
-                                                    <>
-                                                        <div className="text-gray-400 text-[0.375rem]">Prompt</div>
+                                                    <div className="mt-4 mb-4">
+                                                        <div className="text-gray-400 text-[1rem]">Prompt</div>
                                                         <div className="font-bold">{result.question}</div>
-                                                    </>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <>
-                                                        <div className="text-gray-400 text-[0.375rem]">Answer</div>
+                                                        <div className="text-gray-400 text-[1rem]">Answer</div>
                                                         {
                                                             result.userAnswer === result.answer ? (
                                                                 <div className="text-[#29903B] font-bold">{result.answer}</div>

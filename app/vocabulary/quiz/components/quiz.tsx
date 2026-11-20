@@ -188,16 +188,19 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                             {
                                 questionSet.length >= numberQuestions && current ? (
                                     <>
-                                        <h2 className="text-[1.25rem] font-bold">{current.wordText}</h2>
-                                        <p className="text-[0.75rem]">{current.pronunciation}</p>
+                                        <span
+                                            className="text-[2.5rem] font-bold tracking-[1.5px] bg-[#000000] text-[#FFF8EB] rounded-[6px] py-2 px-4"
+                                        >
+                                            {current.wordText}
+                                        </span>
+                                        <p className="text-[1.5rem]">{current.pronunciation}</p>
                                         <p
-                                            className="text-[#637789] text-[0.5rem]"
-                                            style={{ marginBottom: "15px" }}
+                                            className="text-[#637789] text-[1.25rem] mt-4 mb-6"
                                         >
                                             Choose the matching answer.
                                             </p>
                                         <div
-                                            className="grid grid-cols-1 gap-3 mb-6 lg:grid-cols-2 lg:gap-1"
+                                            className="grid grid-cols-1 gap-3 mb-6 lg:grid-cols-2 lg:gap-3"
                                         >
                                             {answerSet[currentQuestion]?.map((answer) => (
                                                 <AnswerButton
@@ -220,18 +223,17 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                         practiceHref="#"
                         chooseHref="/"
                     >
-                        <p className="text-[0.375rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
-                        <h3 className="text-[0.8rem] font-bold">{numberCorrect} of {numberQuestions} correct</h3>
+                        <p className="text-[0.75rem] md:text-[1rem] lg:text-[1rem] text-[#C9362B] font-bold">SESSION COMPLETE</p>
+                        <h3 className="text-[1.25rem] md:text-[1.6rem] lg:text-[1.6rem] font-bold">{numberCorrect} of {numberQuestions} correct</h3>
                         <p
-                            className="text-gray-400 text-[0.5rem]"
-                            style={{ marginBottom: "10px" }}
+                            className="text-gray-400 text-[0.75rem] md:text-[1rem] lg:text-[1rem] mb-4"
                         >
                             Review the corrections, then take another pass.
                         </p>
 
                         <div>
                             <table
-                                className="w-full text-[0.5rem] border-t-[0.5px] border-gray-300"
+                                className="w-full text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] border-t-[0.5px] border-gray-300"
                             >
                                 <tbody>
                                     {
@@ -241,14 +243,14 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                                                 className="border-b-[0.5px] border-gray-300 h-9"
                                             >
                                                 <td>
-                                                    <>
-                                                        <div className="text-gray-400 text-[0.375rem]">Prompt</div>
+                                                    <div className="mt-4 mb-4">
+                                                        <div className="text-gray-400">Prompt</div>
                                                         <div className="font-bold">{result.question}</div>
-                                                    </>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <>
-                                                        <div className="text-gray-400 text-[0.375rem]">Answer</div>
+                                                        <div className="text-gray-400 text-[0.75rem] md:text-[1rem] lg:text-[1rem]">Answer</div>
                                                         {
                                                             result.userAnswer === result.answer ? (
                                                                 <div className="text-[#29903B] font-bold">{result.answer}</div>
@@ -261,9 +263,9 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                                                 <td className="font-bold">
                                                     {
                                                         result.userAnswer === result.answer ? (
-                                                            <span className="text-[#29903B]">&#10004;</span>
+                                                            <span className="text-[#29903B] text-[0.75rem] md:text-[1rem] lg:text-[1rem]">&#10004;</span>
                                                         ) : (
-                                                            <span className="text-[#C9362B]">&#10006;</span>
+                                                            <span className="text-[#C9362B] text-[0.75rem] md:text-[1rem] lg:text-[1rem]">&#10006;</span>
                                                         )
                                                     }
                                                 </td>

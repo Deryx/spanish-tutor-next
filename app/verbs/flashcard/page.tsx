@@ -12,9 +12,9 @@ const FlashcardPage = async() => {
       <section
         className="p-4 w-full border-y-[0.5px] border-gray-300"
       >
-        <p className="text-[#c9362b] text-[0.375rem] font-bold">VERB · STUDY</p>
-        <h1 className="text-[1rem] font-bold">Verb flashcards</h1>
-        <p className="text-[0.5rem] text-[#637789]">Explore each verb across five essential tenses.</p>
+        <p className="text-[#c9362b] text-[1.25rem] font-bold">VERB · STUDY</p>
+        <h1 className="text-[2.5rem] font-bold">Verb flashcards</h1>
+        <p className="text-[1.25rem] text-[#637789]">Explore each verb across five essential tenses.</p>
       </section>
 
       <div className="w-full p-4">

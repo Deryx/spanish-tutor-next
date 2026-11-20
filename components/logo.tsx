@@ -6,12 +6,11 @@ const Logo = () => {
       href="/"
       className="flex place-items-center"
     >
-        <div className="grid justify-center place-items-center w-4 h-4 text-[0.625rem] font-bold rounded-[3px] tracking-[1px] bg-[#c9362b] text-[#fff8eb]">
+        <div className="grid justify-center place-items-center w-8 h-8 text-[1.25rem] font-bold rounded-[6px] tracking-[2px] bg-[#c9362b] text-[#fff8eb]">
             S
         </div>
         <div
-          className="font-bold text-[0.625rem]"
-          style={{ marginLeft: "5px" }}
+          className="ml-2 font-bold text-[1.25rem]"
         >
             Spanish Tutor
         </div>

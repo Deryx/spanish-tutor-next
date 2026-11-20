@@ -5,7 +5,7 @@ import HomeCard from '../components/homeCard'
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col min-h-screen md:w-4/5 lg:w-4/5 md:mx-auto bg-[#fff8eb] text-black">
+    <div className="flex flex-col min-h-screen md:w-3/5 lg:w-3/5 md:mx-auto bg-[#fff8eb] text-black">
       <header
         className="p-4 w-full flex justify-between place-items-center border-y-[0.5px] border-gray-300"
       >
@@ -14,10 +14,10 @@ const HomePage = () => {
         </div>
 
         <div
-          className="hidden flex md:w-1/3 lg:w-1/3 lg:justify-center md:justify-center"
+          className="hidden flex md:visible lg:visible md:w-1/3 lg:w-1/3 lg:justify-center md:justify-center"
         >
           <a
-            className="text-[0.45rem]"
+            className="text-[1rem]"
             style={{
               padding: "5px 8px",
               color: "#84929f"
@@ -41,7 +41,7 @@ const HomePage = () => {
            className="flex w-1/2 md:w-1/3 lg:w-1/3 justify-end"
           >
           <a
-            className="bg-[#f2b441] text-[0.45rem] font-semibold rounded-[3px]"
+            className="bg-[#f2b441] text-[1rem] font-semibold rounded-[3px]"
             style={{ padding: "3px 10px" }}
             href="#">
               Start practicing
@@ -55,25 +55,23 @@ const HomePage = () => {
         >
           <section className="w-full md:w-1/2 lg:w-1/2">
             <h1
-              className="text-[1.85rem] font-bold"
+              className="text-[2.5rem] md:text-[3.75rem] lg:text-[3.75rem] font-bold"
             >
               Your Spanish, one card at a time
             </h1>
             <h3
-              className="text-[0.5rem] text-[#637789]"
+              className="text-[1.25rem] text-[#637789]"
             >
               A tidy library of verbs and words built for daily practice. Pick an activity and begin in a minute.
             </h3>
 
             <div
-              className="flex gap-2"
-              style={{ marginTop: "20px" }}
+              className="flex gap-2 mt-8"
             >
               <a
                 href="#Verbs"
-                className="bg-[#17324D] text-[0.45rem] font-semibold rounded-[3px]"
+                className="bg-[#17324D] text-[1.25rem] font-semibold rounded-[6px] py-2 px-8"
                 style={{
-                  padding: "6px 8px",
                   color: "#fff8eb"
                 }}
               >
@@ -81,12 +79,9 @@ const HomePage = () => {
               </a>
               <a
                 href="#Vocabulary"
-                className="text-[0.45rem] font-semibold rounded-[3px]"
+                className="text-[1.25rem] bg-[#FFFaF2] border-[0.5px] border-[#84929f] font-semibold rounded-[6px] py-2 px-8"
                 style={{
-                  padding: "6px 8px",
-                  backgroundColor: "#FFFaF2",
                   color: "#17324D",
-                  border: "0.5px solid #84929f"
                 }}
               >
                 Browse vocabulary
@@ -94,25 +89,24 @@ const HomePage = () => {
             </div>
 
             <div
-              className="grid grid-cols-3 gap-1"
-              style={{ marginTop: "30px" }}
+              className="grid grid-cols-3 gap-1 mt-5"
             >
               <div className="border-r border-[#84929f]">
-                <p className="text-[1rem] font-bold">106</p>
-                <p className="text-[0.4375rem] text-[#637789] text-[] font-semibold">COMMON VERBS</p>
+                <p className="text-[2rem] font-bold">106</p>
+                <p className="text-[1rem] text-[#637789] font-semibold">COMMON VERBS</p>
               </div>
               <div
                 className="border-r border-[#84929f]"
                 style={{ paddingLeft: "5px" }}
               >
-                <p className="text-[1rem] font-bold">1,000+</p>
-                <p className="text-[0.4375rem] text-[#637789] font-semibold">COMMON WORDS</p>
+                <p className="text-[2rem] font-bold">1,000+</p>
+                <p className="text-[1rem] text-[#637789] font-semibold">COMMON WORDS</p>
               </div>
               <div
                 style={{ paddingLeft: "5px" }}
               >
-                <p className="text-[1rem] font-bold">9</p>
-                <p className="text-[0.4375rem] text-[#637789] font-semibold">ACTIVITIES</p>
+                <p className="text-[2rem] font-bold">9</p>
+                <p className="text-[1rem] text-[#637789] font-semibold">ACTIVITIES</p>
               </div>
             </div>
           </section>
@@ -124,36 +118,32 @@ const HomePage = () => {
               className="flex place-items-center w-full justify-between"
             >
               <div
-                className="text-[0.3375rem] font-semibold bg-[#f2b441] rounded-[3px]"
-                style={{ padding: "3px 4px" }}
+                className="text-[0.8rem] font-semibold bg-[#f2b441] rounded-[6px] pt-2 pb-2 pl-3 pr-3"
               >
                 PRACTICE NOW
               </div>
-              <div className="text-[0.4rem] text-[#637789]">
+              <div className="text-[0.8rem] text-[#637789]">
                 Present tense
               </div>
             </div>
 
             <section>
-              <h2 className="font-bold">Ser</h2>
-              <h3 className="text-[0.4375rem] text-[#637789]">to be &#8212; identify, time, origin</h3>
+              <h2 className="font-bold text-[2rem]">Ser</h2>
+              <h3 className="text-[1rem] text-[#637789]">to be &#8212; identify, time, origin</h3>
             </section>
 
             <div
-              className="grid grid-cols-2 gap-1"
-              style={{ marginBottom: "10px" }}
+              className="grid grid-cols-2 gap-3 mt-5 mb-5"
             >
               <div>
                 <div
-                  className=" text-[0.4375rem] rounded-[3px] border-[0.5px] border-gray-300 bg-[#FFF9EE]"
-                  style={{ padding: "5px", marginBottom: "5px" }}
+                  className=" text-[1rem] rounded-[3px] border-[0.5px] border-gray-300 bg-[#FFF9EE] mb-3 p-2"
                 >
                   <p className="text-[#637789]">yo</p>
                   <p className="font-bold">soy</p>
                 </div>
                 <div
-                  className="text-[0.4375rem] rounded-[3px] border-[0.5px] border-gray-300 bg-[#FFF9EE]"
-                  style={{ padding: "5px", marginBottom: "5px" }}
+                  className="text-[1rem] rounded-[6px] border-[0.5px] border-gray-300 bg-[#FFF9EE] mb-3 p-2"
                 >
                   <p className="text-[#637789]">tú</p>
                   <p className="font-bold">eres</p>
@@ -161,15 +151,13 @@ const HomePage = () => {
               </div>
               <div>
                 <div
-                  className=" text-[0.4375rem] rounded-[3px] border-[0.5px] border-gray-300 bg-[#FFF9EE]"
-                  style={{ padding: "5px", marginBottom: "5px" }}
+                  className=" text-[1rem] rounded-[6px] border-[0.5px] border-gray-300 bg-[#FFF9EE] mb-3 p-2"
                 >
                   <p className="text-[#637789]">él/ella</p>
                   <p className="font-bold">es</p>
                 </div>
                 <div
-                  className=" text-[0.4375rem] rounded-[3px] border-[0.5px] border-gray-300 bg-[#FFF9EE]"
-                  style={{ padding: "5px", marginBottom: "5px" }}
+                  className=" text-[1rem] rounded-[6px] border-[0.5px] border-gray-300 bg-[#FFF9EE] mb-3 p-2"
                 >
                   <p className="text-[#637789]">nosotros</p>
                   <p className="font-bold">somos</p>
@@ -179,8 +167,8 @@ const HomePage = () => {
 
             <Link
               href="/verbs/flashcard"
-              className="w-full text-center bg-[#c9362b] text-[0.5rem] font-semibold rounded-[3px]"
-              style={{ padding: "5px 0", color: "#fff8eb" }}
+              className="w-full text-center bg-[#c9362b] text-[1.25rem] text-[#fff8eb] font-semibold rounded-[3px] py-2"
+              style={{ color: "#fff8eb" }}
             >
               Open verb flashcards
             </Link>
@@ -192,7 +180,7 @@ const HomePage = () => {
             <div>
               <a
                 id="Verbs"
-                className="text-[0.4375rem] font-semibold"
+                className="text-[1rem] font-semibold"
                 style={{ color: "#c9362b" }}
               >
                 (A) VERBS
@@ -200,9 +188,9 @@ const HomePage = () => {
               <h2 className="text-[1rem] font-bold">106 common verbs</h2>
             </div>
             <div>
-              <p className="text-[0.4375rem] text-[#c9362b] font-semibold">&nbsp;</p>
+              <p className="text-[1rem] text-[#c9362b] font-semibold">&nbsp;</p>
               <div
-                className="mt-[-15px] md:mt-[-20px] text-[0.45rem] text-[#637789]"
+                className="mt-[-15px] md:mt-[0] text-[1rem] text-[#637789]"
               >
                 Present · preterite · imperfect · conditional · future
               </div>
@@ -239,14 +227,14 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="w-full p-4 mt-15 md:mt-[-40px] lg:mt-[-40px]">
+        <section className="w-full p-4 mt-25 md:mt-[-40px] lg:mt-[-40px]">
           <div
             className="grid grid-cols-1 gap-3 lg:flex w-full justify-between border-b-[0.5px] border-gray-300"
           >
             <div>
               <a
                 id="Vocabulary"
-                className="text-[0.4375rem] font-semibold"
+                className="text-[1rem] font-semibold"
                 style={{ color: "#c9362b"}}
               >
                 (B) VOCABULARY
@@ -254,9 +242,9 @@ const HomePage = () => {
               <h2 className="text-[1rem] font-bold">1000+ words</h2>
             </div>
             <div>
-              <p className="text-[0.4375rem] text-[#c9362b] font-semibold">&nbsp;</p>
+              <p className="text-[1rem] text-[#c9362b] font-semibold">&nbsp;</p>
               <div
-                className="mt-[-15px] md:mt-[-20px] text-[0.45rem] text-[#637789]"
+                className="mt-[-15px] md:mt-[0] text-[1rem] text-[#637789]"
               >
                 Choose a category or practice everything
               </div>
@@ -324,14 +312,14 @@ const HomePage = () => {
       </main>
 
       <footer
-        className="w-full shrink-0 px-4 pt-5 pb-5 mt-20 md:mt-5 border-gray-300 border-t-[0.5px]"
+        className="w-full shrink-0 px-4 pt-5 pb-5 mt-30 md:mt-5 border-gray-300 border-t-[0.5px]"
       >
         <div>
           <Logo />
         </div>
 
         <div
-          className="w-full md:flex md:justify-between lg:flex lg:justify-between text-[0.4375rem] text-[#84929f]"
+          className="w-full md:flex md:justify-between lg:flex lg:justify-between text-[1rem] text-[#84929f]"
         >
           <p className="mt-2 mb-2">Verbs, words, and focused practice at your own pace</p>
           <p>106 verbs · 1000+ words · 9 activities</p>

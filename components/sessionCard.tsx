@@ -12,20 +12,19 @@ type SessionCardProps = {
 const SessionCard = ({ children, onPracticeClick, onSessionButtonClick, sessionSelected }: SessionCardProps) => {
     return (
         <section
-            className="p-4 w-full md:m-auto lg:m-auto md:w-1/2 lg:w-1/2 flex flex-col border-[0.5px] border-gray-300 bg-[#FFFDF7]"
+            className="p-4 w-full md:m-auto lg:m-auto md:w-3/5 lg:w-3/5 flex flex-col border-[0.5px] border-gray-300 bg-[#FFFDF7]"
         >
             <h2
-                className="text-[0.75rem] font-bold"
-                style={{ marginBottom: "10px" }}
+                className="text-[1.5rem] mb-5 font-bold"
             >
                 Set up your session
             </h2>
 
             {children}
 
-            <div style={{ marginBottom: "5px" }}>
+            <div className="mb-4 mt-4">
                 <label
-                    className="text-[0.5rem] font-bold"
+                    className="text-[1.25rem] font-bold"
                 >
                     Rounds
                 </label>
@@ -56,8 +55,7 @@ const SessionCard = ({ children, onPracticeClick, onSessionButtonClick, sessionS
             <button
                 type="button"
                 onClick={onPracticeClick}
-                className="bg-[#C9362B] text-[#FFFDF7] text-[0.4375rem] rounded-[3px]"
-                style={{ padding: "4px 0" }}
+                className="bg-[#C9362B] text-[#FFFDF7] text-[1.25rem] rounded-[6px] py-2 mt-4"
             >
                 Begin practice &#8594;
             </button>

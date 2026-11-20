@@ -9,8 +9,7 @@ const AnswerButton = ({ answer, onClick }: AnswerButtonProps) => {
             id={answer}
             name={answer}
             onClick={onClick}
-            className="w-full border-[0.5px] border-gray-300 bg-[#FFF8EB] text-[0.5rem] rounded-[3px]"
-            style={{ padding: "5px 0" }}
+            className="w-full border-[0.5px] border-gray-300 bg-[#FFF8EB] text-[1rem] rounded-[6px] py-2 px-4 mb-4 text-[#000000]"
         >
             {answer}
         </button>
