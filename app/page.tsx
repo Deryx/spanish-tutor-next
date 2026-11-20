@@ -98,7 +98,7 @@ const HomePage = () => {
               style={{ marginTop: "30px" }}
             >
               <div className="border-r border-[#84929f]">
-                <p className="text-[1rem] font-bold">100</p>
+                <p className="text-[1rem] font-bold">106</p>
                 <p className="text-[0.4375rem] text-[#637789] text-[] font-semibold">COMMON VERBS</p>
               </div>
               <div
@@ -197,7 +197,7 @@ const HomePage = () => {
               >
                 (A) VERBS
               </a>
-              <h2 className="text-[1rem] font-bold">100 common verbs</h2>
+              <h2 className="text-[1rem] font-bold">106 common verbs</h2>
             </div>
             <div>
               <p className="text-[0.4375rem] text-[#c9362b] font-semibold">&nbsp;</p>
@@ -334,7 +334,7 @@ const HomePage = () => {
           className="w-full md:flex md:justify-between lg:flex lg:justify-between text-[0.4375rem] text-[#84929f]"
         >
           <p className="mt-2 mb-2">Verbs, words, and focused practice at your own pace</p>
-          <p>100 verbs · 700+ words · 9 activities</p>
+          <p>106 verbs · 1000+ words · 9 activities</p>
         </div>
       </footer>
     </div>
