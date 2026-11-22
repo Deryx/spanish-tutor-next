@@ -187,15 +187,13 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
 
         const answerText = isCorrect ? (
             <div
-                className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.5rem] font-bold"
-                style={{ paddingLeft: "10px", marginBottom: "15px" }}
+                className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-20 text-[1rem] font-bold px-2 mt-6 mb-4"
             >
                 Correct!
             </div>
         ): (
             <div
-                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-10 text-[0.5rem]"
-                style={{ paddingLeft: "10px", marginBottom: "15px" }}
+                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-20 text-[1rem] px-2 font-bold mt-6 mb-4"
             >
                 <p className="font-bold">Review your matches</p>
                 <p>{ numberCorrect } of { tiles.length } are in the correct position.</p>
@@ -422,7 +420,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                                     const isCorrect = userAnswer === answer;
 
                                                     return (
-                                                        <div className="mt-4 mb-4 text-[1rem]">
+                                                        <div className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.75rem] md:text-[1rem] lg:text-[1rem] font-bold mt-6 mb-4">
                                                             <div className="text-gray-400">{keys[answerIndex]}</div>
                                                             <div
                                                                 key={`${answer}-${answerIndex}`}

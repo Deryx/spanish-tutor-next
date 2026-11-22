@@ -155,15 +155,13 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
 
         const answerText = isCorrect ? (
             <div
-                className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.5rem] font-bold"
-                style={{ paddingLeft: "10px", marginBottom: "15px" }}
+                className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[1rem] font-bold mt-6 mb-4"
             >
                 Correct!
             </div>
         ): (
             <div
-                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-10 text-[0.5rem]"
-                style={{ paddingLeft: "10px", marginBottom: "15px" }}
+                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-20 text-[1rem] px-2 font-bold mt-6 mb-4"
             >
                 <p className="font-bold">Review your matches</p>
                 <p>{ numberCorrect } of { userAnswerTexts.length } are in the correct position.</p>

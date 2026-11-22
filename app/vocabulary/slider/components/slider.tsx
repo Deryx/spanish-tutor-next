@@ -136,15 +136,13 @@ const Slider = ({ categories, entries }: SliderProps) => {
 
         const answerText = isCorrect ? (
             <div
-                className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.5rem] font-bold"
-                style={{ paddingLeft: "10px", marginBottom: "15px" }}
+                className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-20 text-[1rem] font-bold px-2 mt-6 mb-4"
             >
                 Correct!
             </div>
         ): (
             <div
-                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-10 text-[0.5rem]"
-                style={{ paddingLeft: "10px", marginBottom: "15px" }}
+                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-20 text-[1rem] px-2 font-bold mt-6 mb-4"
             >
                 <p className="font-bold">Review your matches</p>
                 <p>{ numberCorrect } of { current.length } are in the correct position.</p>
@@ -331,7 +329,7 @@ const Slider = ({ categories, entries }: SliderProps) => {
                                             <td className="w-1/2">
                                                 <div className="font-bold">
                                                     {result.question.map((prompt, promptIndex) => (
-                                                        <div className="mt-4 mb-4 text-[0.75rem]">
+                                                        <div className="mt-6 mb-4 text-[0.75rem]">
                                                             <div className="text-gray-400">Prompt</div>
                                                             <div key={`${prompt}-${promptIndex}`}>{prompt}</div>
                                                         </div>
@@ -344,7 +342,7 @@ const Slider = ({ categories, entries }: SliderProps) => {
                                                     const isCorrect = userAnswer === answer;
 
                                                     return (
-                                                        <div className="mt-4 mb-4 text-[0.75rem]">
+                                                        <div className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.75rem] md:text-[1rem] lg:text-[1rem] font-bold mt-6 mb-4">
                                                             <div className="text-gray-400">Answer</div>
                                                             <div
                                                                 key={`${answer}-${answerIndex}`}

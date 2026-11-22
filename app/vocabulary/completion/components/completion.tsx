@@ -96,8 +96,7 @@ const Completion = ({ categories, entries }: CompletionProps) => {
             </div>
         ): (
             <div
-                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-10 text-[0.5rem]"
-                style={{ paddingLeft: "10px", marginBottom: "15px" }}
+                className="flex flex-col justify-center border-l-[3px] border-l-[#FF0000] bg-[#F9E8E2] h-20 text-[0.75rem] md:text-[1rem] lg:text-[1rem] font-bold mt-6 mb-4"
             >
                 <p className="font-bold">Not quite!</p>
                 <p>The correct answer is: <span className="font-bold">{current.wordText}</span>
