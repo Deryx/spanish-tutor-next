@@ -267,7 +267,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="yo"
                                                 value={userAnswers.yo}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
@@ -279,7 +279,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="tu"
                                                 value={userAnswers.tu}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
@@ -291,7 +291,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="el"
                                                 value={userAnswers.el}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
@@ -303,7 +303,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="nosotros"
                                                 value={userAnswers.nosotros}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
@@ -315,7 +315,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="vosotros"
                                                 value={userAnswers.vosotros}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-2/3"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
@@ -327,7 +327,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="ellos"
                                                 value={userAnswers.ellos}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-1 px-2 w-2/3"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-1 px-2 w-3/5"
                                             />
                                         </li>
                                     </ul>
