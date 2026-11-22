@@ -205,6 +205,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                                                     key={answer}
                                                     answer={answer}
                                                     onClick={() => handleAnswerButtonClick(answer)}
+                                                    answerSelected={selectedAnswer}
                                                 />
                                             ))}
                                         </div>

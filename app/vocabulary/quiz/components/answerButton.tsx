@@ -1,15 +1,22 @@
 type AnswerButtonProps = {
     answer: string;
     onClick: () => void;
-}
+    answerSelected?: string;
+};
 
-const AnswerButton = ({ answer, onClick }: AnswerButtonProps) => {
+const AnswerButton = ({ answer, onClick, answerSelected }: AnswerButtonProps) => {
+    const isSelected = answerSelected === answer;
+
     return (
         <button
-            id={answer}
-            name={answer}
+            type="button"
             onClick={onClick}
-            className="w-full border-[0.5px] border-gray-300 bg-[#FFF8EB] text-[1rem] rounded-[6px] py-2 px-4 mb-4 text-[#000000]"
+            aria-pressed={isSelected}
+            className={`w-full border-[0.5px] border-gray-300 text-[1rem] rounded-[6px] py-2 px-4 mb-4 ${
+                isSelected
+                    ? 'bg-[#C9362B] text-white'
+                    : 'bg-[#FFF8EB] hover:bg-[#F2B441] text-[#000000]'
+            }`}
         >
             {answer}
         </button>
