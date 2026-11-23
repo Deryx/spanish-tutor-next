@@ -2,13 +2,14 @@
 
 import React, { useState, JSX } from "react";
 
-import { RandomNumberArrayGenerator } from "@/lib/helpers";
 import ScreenCard from "@/components/sessionCard";
 import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
+import SpeakButton from "@/components/speakButton";
+import { recordResults, verbKey } from "@/lib/progress";
 import SummaryCard from "@/components/summaryCard";
 
-import { getConjugationSet } from "@/lib/database"
+import { pickConjugationSets } from "@/lib/database";
 
 import { Tense, Verb, ConjugationSet } from "@/types/verbs";
 
@@ -67,6 +68,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
         ellos: "",
     });
 
+    const emptyFor = (answer?: Conjugation): Conjugation => ({
+        ...emptyConjugation(),
+        yo: answer?.yo === "—" ? "—" : "",
+    });
+
     const handleTenseChange = (value: number) => {
         setSelectedTense(value);
     };
@@ -78,24 +84,10 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
         setNumberQuestions(Number(activeButton?.name ?? 0));
     };
 
-    const createQuestionSet = (): number[] => {
-        const count = Math.min(numberQuestions, verbs.length);
-        const set = RandomNumberArrayGenerator(0, verbs.length - 1, count);
-        setQuestionSet(set);
-        return set;
-    };
-
-    const retrieveAnswers = async (set: number[]): Promise<Conjugation[]> => {
-        if (set.length === 0) return [];
-
-        const conjugations = await Promise.all(
-            set.map((index) => getConjugationSet(verbs[index].verbId, selectedTense))
-        );
-
-        return conjugations.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
+    const toConjugations = (sets: ConjugationSet[]): Conjugation[] =>
+        sets.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
             yo, tu, el, nosotros, vosotros, ellos,
         }));
-    };
 
     const keys = ["yo", "tu", "el", "nosotros", "vosotros", "ellos"] as const;
     const currentConjugations = correctAnswers[currentQuestion] ?? emptyConjugation();
@@ -125,10 +117,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
     const handlePracticeClick = async () => {
         setShowSession(false);
 
-        const set = createQuestionSet();
-        const answers: Conjugation[] = await retrieveAnswers(set);
+        const { indices, sets } = await pickConjugationSets(verbs, selectedTense, numberQuestions);
+        const answers = toConjugations(sets);
+        setQuestionSet(indices);
         setCorrectAnswers(answers);
-        setUserAnswers(emptyConjugation());
+        setUserAnswers(emptyFor(answers[0]));
     };
 
     const handleExitSessionClick = () => {
@@ -149,6 +142,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
         const norm = (s: string) => s.trim().toLowerCase();
         const numberCorrect = keys.filter((k) => norm(userAnswers[k]) === norm(currentAnswer[k])).length;
         const isCorrect = numberCorrect === keys.length;
+        recordResults({ [verbKey(verbs[current].verbId, selectedTense)]: isCorrect });
 
         setTotalCorrect((prev) => prev + numberCorrect);
         setNumberCorrect((prev) => [...prev, numberCorrect]);
@@ -189,7 +183,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
 
         setShowAnswer(false);
         setCurrentQuestion(next);
-        setUserAnswers(emptyConjugation());
+        setUserAnswers(emptyFor(correctAnswers[next]));
     };
 
     const handleSeeResultsClick = () => {
@@ -259,19 +253,20 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
 
                                     <ul className="w-full">
                                         <li
-                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
+                                            className="flex justify-between text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Yo</span>
                                             <input
                                                 type="text"
                                                 name="yo"
+                                                readOnly={currentConjugations.yo === "—"}
                                                 value={userAnswers.yo}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-2 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
+                                            className= "flex justify-between text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Tu</span>
                                             <input
@@ -279,11 +274,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="tu"
                                                 value={userAnswers.tu}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-2 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
+                                            className= "flex justify-between text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Él/Ella/Usted</span>
                                             <input
@@ -291,11 +286,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="el"
                                                 value={userAnswers.el}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-2 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
+                                            className= "flex justify-between text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Nosotros/Nosotras</span>
                                             <input
@@ -303,11 +298,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="nosotros"
                                                 value={userAnswers.nosotros}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-2 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
+                                            className= "flex justify-between text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Vosotros/Vosotras</span>
                                             <input
@@ -315,11 +310,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="vosotros"
                                                 value={userAnswers.vosotros}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-2 px-2 w-3/5"
                                             />
                                         </li>
                                         <li
-                                            className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
+                                            className= "flex justify-between text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] w-full mb-4"
                                         >
                                             <span className="flex w-1/3 place-items-center">Ellos/Ellas/Ustedes</span>
                                             <input
@@ -327,13 +322,16 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                                                 name="ellos"
                                                 value={userAnswers.ellos}
                                                 onChange={handleUserAnswers}
-                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-1 px-2 w-3/5"
+                                                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[0.8rem] py-2 px-2 w-3/5"
                                             />
                                         </li>
                                     </ul>
 
                                     {showAnswer && conjugationsComplete ? (
-                                        <div>{answerText}</div>
+                                        <div>
+                                            <div>{answerText}</div>
+                                            <div className="mt-3"><SpeakButton text={keys.map((key) => currentConjugations[key]).filter((form) => form !== "—").join(", ")} label="Listen to the forms" /></div>
+                                        </div>
                                     ) : null}
                                 </>
                             ) : null}

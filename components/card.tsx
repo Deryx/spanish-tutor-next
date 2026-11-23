@@ -22,13 +22,13 @@ const Card = ({
 
             <div className="flex justify-between mt-20">
                 <button
-                    className="bg-[#F2B441] text-[1rem] rounded-[6px] font-semibold text-[#000000]"
+                    className="bg-[#F2B441] text-[0.75rem] md:text-[1rem] lg:text-[1rem] rounded-[6px] font-semibold text-[#000000]"
                     style={{ padding: "4px 8px" }}
                     onClick={onLeftButtonClick}>
                         {leftButtonLabel}
                     </button>
                 <button
-                    className="bg-[#C9362B] text-[1rem] rounded-[6px] font-semibold text-[#FFFDF7]"
+                    className="bg-[#C9362B] text-[0.75rem] md:text-[1rem] lg:text-[1rem] rounded-[6px] font-semibold text-[#FFFDF7]"
                     style={{ padding: "4px 8px" }}
                     onClick={onRightButtonClick}>
                         {rightButtonLabel}

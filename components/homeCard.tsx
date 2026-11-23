@@ -12,7 +12,8 @@ type HomeCardProps = {
     tagline: string;
     hrefColor: hrefColorType;
     href: string;
-
+    label?: string;
+    cta?: string;
 }
 
 const HomeCard = ({
@@ -21,7 +22,9 @@ const HomeCard = ({
     title,
     tagline,
     hrefColor,
-    href
+    href,
+    label = "DRILL",
+    cta = "Practice"
 }: HomeCardProps) => {
     return (
         <div
@@ -39,7 +42,7 @@ const HomeCard = ({
                 >
                     {buttonText}
                 </div>
-                <div className="text-[0.8rem] text-[#84929f]">DRILL</div>
+                <div className="text-[0.8rem] text-[#84929f]">{label}</div>
             </div>
             <section
                 className="mt-2 mb-2"
@@ -59,7 +62,7 @@ const HomeCard = ({
                         color: hrefColor === "red" ? "#C9362B" : "#000000"
                     }}
                 >
-                    Practice &#8594;
+                    {cta} &#8594;
                     </Link>
             </div>
         </div>

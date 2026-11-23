@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
+import SpeakButton from "@/components/speakButton";
 import { Category, Vocabulary } from "@/types/vocabulary";
 
 type FlashcardProps = {
@@ -44,7 +45,7 @@ const Flashcard = ({ categories, entries }: FlashcardProps ) => {
   return (
     <>
       <div
-        className="w-full lg:w-3/5 flex place-items-center"
+        className="w-full md:m-auto md:m-0 lg:m-auto lg:m-0 md:w-3/5 lg:w-3/5 flex place-items-center"
       >
         <Dropdown
           type="category"
@@ -64,13 +65,12 @@ const Flashcard = ({ categories, entries }: FlashcardProps ) => {
       >
         <div className="flex flex-col place-items-center">
           <p
-            className="text-[1.5rem] bg-[#000000] text-[#FFFAF2] rounded-[3px] font-bold"
-            style={{ marginTop: "20px", padding: "0 8px" }}
+            className="text-[1.5rem] md:text-[3rem] lg:text-[3rem] px-4 pb-2 bg-[#000000] text-[#FFFAF2] rounded-[6px] font-bold"
           >
               {studySet[currentEntry]?.wordText}
           </p>
           <p
-            style={{ marginBottom: "10px" }}
+            className="text-[0.75rem] md:text-[1.5rem] lg:text-[1.5rem] text-[#637789]"
           >
             {studySet[currentEntry]?.pronunciation}
           </p>
@@ -78,14 +78,15 @@ const Flashcard = ({ categories, entries }: FlashcardProps ) => {
             !isRevealed ? (
               <button
                 onClick={handleIsRevealedClick}
-                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[3px] text-[0.4375rem]"
-                style={{ padding: "5px 8px", marginBottom: "25px" }}
+                className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] text-[1rem] md:text-[1.5rem] lg:text-1.5rem] px-4 py-3 mt-8"
               >
                 Reveal meaning
               </button>
             ) : <p
-                  className="text-[#637789] text-[0.75rem] font-bold"
-                  style={{ marginBottom: "25px" }}>{studySet[currentEntry]?.translation}
+                  className="text-[#637789] text-[1rem] md:text-[3rem] lg:text-[3rem] mt-8 font-bold"
+                  >
+                    {studySet[currentEntry]?.translation
+                  }
                 </p>
           }
         </div>

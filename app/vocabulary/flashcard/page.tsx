@@ -13,9 +13,9 @@ const FlashcardPage = async() => {
       <section
         className="p-4 border-y-[0.5px] border-gray-300"
       >
-        <p className="text-[#c9362b] text-[0.375rem] font-bold">VOCABULARY · STUDY</p>
-        <h1 className="text-[1rem] font-bold">Vocabulary flashcards</h1>
-        <p className="text-[0.5rem] text-[#637789]">Build recognition one useful word at a time.</p>
+        <p className="text-[#c9362b] text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] font-bold">VOCABULARY · STUDY</p>
+        <h1 className="text-[1.5rem] md:text-[2.25rem] lg:text-[2.25rem] font-bold">Vocabulary flashcards</h1>
+        <p className="text-[1rem] md:text-[1.25rem] lg:text-[1.25rem] text-[#637789]">Build recognition one useful word at a time.</p>
       </section>
 
       <div className="p-4">

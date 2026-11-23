@@ -6,6 +6,8 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
 import ScreenCard from "@/components/sessionCard";
 import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
+import SpeakButton from "@/components/speakButton";
+import { pickIndicesByReview, recordResults, wordKey } from "@/lib/progress";
 import SummaryCard from "@/components/summaryCard";
 import AnswerButton from "../components/answerButton";
 
@@ -32,7 +34,7 @@ const shuffle = <T,>(items: T[]): T[] => {
 };
 
 const randomAnswers = (correctAnswer: string, entries: Vocabulary[]): string[] => {
-    const pool = entries.filter((entry) => entry.wordText !== correctAnswer);
+    const pool = entries.filter((entry) => entry.translation !== correctAnswer);
     const count = Math.min(3, pool.length);
     const indexes = RandomNumberArrayGenerator(0, pool.length - 1, count);
     const wrongAnswers = indexes.map((i: number) => pool[i].translation);
@@ -73,8 +75,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                 ? entries
                 : entries.filter((entry) => entry.categoryId === category);
 
-        const count = Math.min(numberQuestions, pool.length);
-        const indexes = RandomNumberArrayGenerator(0, pool.length, count);
+        const indexes = pickIndicesByReview(pool, numberQuestions);
 
         setQuestionSet(indexes.map((i: number) => pool[i]));
         setAnswerSet(indexes.map((i: number) => randomAnswers(pool[i].translation, entries)));
@@ -97,6 +98,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
         const answer = selectedAnswer;
 
         const isCorrect = selectedAnswer === questionSet[currentQuestion].translation;
+        recordResults({ [wordKey(current.wordId)]: isCorrect });
 
         if (isCorrect) setNumberCorrect(prev => prev + 1);
 
@@ -191,6 +193,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                                         >
                                             {current.wordText}
                                         </span>
+                                        <SpeakButton text={current.wordText} label="Listen to the word" className="ml-3 align-middle" />
                                         <p className="text-[1.5rem]">{current.pronunciation}</p>
                                         <p
                                             className="text-[#637789] text-[1.25rem] mt-4 mb-6"
@@ -210,7 +213,10 @@ const Quiz = ({ categories, entries }: QuizProps) => {
                                             ))}
                                         </div>
                                         {showAnswer && (
-                                            <div>{answerText}</div>
+                                            <div>
+<div>{answerText}</div>
+<div className="mt-3"><SpeakButton text={current.wordText} label="Listen to the word" /></div>
+</div>
                                         )}
                                     </>
                                 ) : null

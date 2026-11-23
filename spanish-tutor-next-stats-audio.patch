@@ -1,0 +1,1284 @@
+diff --git a/app/page.tsx b/app/page.tsx
+index 8959c96..1333f6b 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -35,6 +35,16 @@ const HomePage = () => {
+           >
+               Vocabulary
+           </a>
++          <Link
++            className="text-[1rem]"
++            style={{
++              padding: "5px 8px",
++              color: "#84929f"
++            }}
++            href="/stats"
++          >
++              Progress
++          </Link>
+         </div>
+ 
+         <div
+@@ -309,6 +319,43 @@ const HomePage = () => {
+             />
+           </div>
+         </section>
++
++        <section className="w-full p-4 md:mt-[-20px] lg:mt-[-20px]">
++          <div className="grid grid-cols-1 gap-3 lg:flex w-full justify-between border-b-[0.5px] border-gray-300">
++            <div>
++              <span
++                className="text-[1rem] font-semibold"
++                style={{ color: "#c9362b" }}
++              >
++                (C) PROGRESS
++              </span>
++              <h2 className="text-[1rem] font-bold">Your results</h2>
++            </div>
++            <div>
++              <p className="text-[1rem] text-[#c9362b] font-semibold">&nbsp;</p>
++              <div
++                className="mt-[-15px] md:mt-[0] text-[1rem] text-[#637789]"
++              >
++                Accuracy, words due for review, and the ones you miss most
++              </div>
++            </div>
++          </div>
++
++          <div
++            className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 h-full mt-5"
++          >
++            <HomeCard
++              buttonColor='red'
++              buttonText='01'
++              title='Progress'
++              tagline='See what you have mastered and what is due for review.'
++              href='/stats'
++              hrefColor='red'
++              label='STATS'
++              cta='View'
++            />
++          </div>
++        </section>
+       </main>
+ 
+       <footer
+diff --git a/app/stats/components/stats.tsx b/app/stats/components/stats.tsx
+new file mode 100644
+index 0000000..a0b5627
+--- /dev/null
++++ b/app/stats/components/stats.tsx
+@@ -0,0 +1,153 @@
++"use client";
++
++import Link from "next/link";
++import { useState } from "react";
++
++import { useHydrated, useProgress } from "@/lib/useProgress";
++import { accuracyOf, resetProgress, summarize, Summary, troubleKeys } from "@/lib/progress";
++import { Tense, Verb } from "@/types/verbs";
++import { Vocabulary } from "@/types/vocabulary";
++
++type StatsProps = {
++    words: Vocabulary[];
++    verbs: Verb[];
++    tenses: Tense[];
++};
++
++type BlockProps = {
++    title: string;
++    summary: Summary;
++    total?: number;
++};
++
++const Stat = ({ value, label }: { value: string; label: string }) => (
++    <div>
++        <p className="text-[2rem] font-bold">{value}</p>
++        <p className="text-[0.9rem] text-[#637789] font-semibold">{label}</p>
++    </div>
++);
++
++const Block = ({ title, summary, total }: BlockProps) => {
++    const accuracy = accuracyOf(summary);
++    const share = total ? Math.min(100, Math.round((100 * summary.mastered) / total)) : 0;
++
++    return (
++        <section className="w-full p-4 mb-4 border-[0.5px] border-gray-300 bg-[#FFFDF7]">
++            <p className="text-[1rem] text-[#C9362B] font-bold mb-3">{title}</p>
++
++            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
++                <Stat value={total ? `${summary.practiced} / ${total.toLocaleString()}` : `${summary.practiced}`} label="PRACTICED" />
++                <Stat value={`${summary.mastered}`} label="MASTERED" />
++                <Stat value={`${summary.due}`} label="DUE FOR REVIEW" />
++                <Stat value={accuracy === null ? "–" : `${accuracy}%`} label="ACCURACY" />
++            </div>
++
++            {total ? (
++                <div className="mt-4">
++                    <div className="w-full h-2 rounded-[3px] bg-[#FFF8EB] border-[0.5px] border-gray-300">
++                        <div
++                            className="h-full rounded-[3px] bg-[#29903B]"
++                            style={{ width: `${share}%` }}
++                        />
++                    </div>
++                    <p className="text-[0.9rem] text-[#84929f] mt-1">{share}% mastered</p>
++                </div>
++            ) : null}
++        </section>
++    );
++};
++
++const StatsView = ({ words, verbs, tenses }: StatsProps) => {
++    const hydrated = useHydrated();
++    const progress = useProgress();
++    const [now] = useState(() => Date.now());
++
++    if (!hydrated) return null;
++
++    const wordSummary = summarize(progress, "w", now);
++    const verbSummary = summarize(progress, "v", now);
++
++    const wordLabels = new Map(words.map((word) => [word.wordId, `${word.wordText} — ${word.translation}`]));
++    const verbLabels = new Map(verbs.map((verb) => [verb.verbId, verb.infinitive]));
++    const tenseLabels = new Map(tenses.map((tense) => [tense.tenseId, tense.tenseText]));
++
++    const trouble = [
++        ...troubleKeys(progress, "w").map(({ key, misses }) => ({
++            key,
++            misses,
++            label: wordLabels.get(Number(key.split(":")[1])) ?? key,
++        })),
++        ...troubleKeys(progress, "v").map(({ key, misses }) => {
++            const [, verbId, tenseId] = key.split(":");
++
++            return {
++                key,
++                misses,
++                label: `${verbLabels.get(Number(verbId)) ?? verbId} · ${tenseLabels.get(Number(tenseId)) ?? tenseId}`,
++            };
++        }),
++    ].sort((a, b) => b.misses - a.misses);
++
++    const nothingYet = wordSummary.practiced === 0 && verbSummary.practiced === 0;
++
++    const handleReset = () => {
++        if (window.confirm("Reset all saved progress on this device?")) resetProgress();
++    };
++
++    if (nothingYet) {
++        return (
++            <div className="w-full p-4 border-[0.5px] border-gray-300 bg-[#FFFDF7]">
++                <p className="text-[1.25rem] font-bold">Nothing practiced yet</p>
++                <p className="text-[#637789] mb-4">Finish a round in any activity and your results will show up here.</p>
++                <Link
++                    href="/"
++                    className="inline-block bg-[#C9362B] text-[#FFF8EB] rounded-[6px] px-4 py-2"
++                >
++                    Choose activity
++                </Link>
++            </div>
++        );
++    }
++
++    return (
++        <>
++            <Block title="VOCABULARY" summary={wordSummary} total={words.length} />
++            <Block title="VERB FORMS" summary={verbSummary} />
++
++            {trouble.length > 0 ? (
++                <section className="w-full p-4 mb-4 border-[0.5px] border-gray-300 bg-[#FFFDF7]">
++                    <p className="text-[1.25rem] font-bold mb-2">Needs the most work</p>
++                    <ul>
++                        {trouble.map((item) => (
++                            <li
++                                key={item.key}
++                                className="flex justify-between gap-4 py-2 border-t-[0.5px] border-gray-300"
++                            >
++                                <span>{item.label}</span>
++                                <span className="text-[#C9362B] font-bold whitespace-nowrap">{item.misses} missed</span>
++                            </li>
++                        ))}
++                    </ul>
++                </section>
++            ) : null}
++
++            <div className="flex gap-2">
++                <Link
++                    href="/"
++                    className="bg-[#FFF8EB] border-[0.5px] rounded-[6px] border-gray-300 px-4 py-2"
++                >
++                    Choose activity
++                </Link>
++                <button
++                    type="button"
++                    onClick={handleReset}
++                    className="bg-[#FFF8EB] border-[0.5px] rounded-[6px] border-gray-300 px-4 py-2"
++                >
++                    Reset progress
++                </button>
++            </div>
++        </>
++    );
++};
++
++export default StatsView;
+diff --git a/app/stats/layout.tsx b/app/stats/layout.tsx
+new file mode 100644
+index 0000000..88c623b
+--- /dev/null
++++ b/app/stats/layout.tsx
+@@ -0,0 +1,23 @@
++import Logo from "@/components/logo";
++
++const StatsLayout = ({
++    children
++}: React.PropsWithChildren) => {
++    return (
++        <div className="w-full flex flex-col md:w-3/5 lg:w-3/5 md:m-0 md:m-auto lg:m-0 lg:m-auto text-black h-full bg-[#FFF8EB]">
++            <header
++                className="p-4 w-full flex place-items-center justify-between"
++            >
++                <Logo />
++                <div
++                    className="text-[1rem] text-[#84929f] font-bold"
++                >
++                    PRACTICE LIBRARY
++                </div>
++            </header>
++            { children }
++        </div>
++    );
++};
++
++export default StatsLayout;
+diff --git a/app/stats/page.tsx b/app/stats/page.tsx
+new file mode 100644
+index 0000000..7d855f1
+--- /dev/null
++++ b/app/stats/page.tsx
+@@ -0,0 +1,34 @@
++import StatsView from "./components/stats";
++import { getDatabaseData } from "@/lib/database";
++import { Tense, Verb } from "@/types/verbs";
++import { Vocabulary } from "@/types/vocabulary";
++
++const StatsPage = async () => {
++  const [words, verbs, tenses] = await Promise.all([
++    getDatabaseData<Vocabulary[]>("Dictionary"),
++    getDatabaseData<Verb[]>("Verbs"),
++    getDatabaseData<Tense[]>("Tenses")
++  ]);
++
++  return (
++    <>
++      <section
++        className="p-4 w-full border-y-[0.5px] border-gray-300"
++      >
++        <p className="text-[#c9362b] text-[1.25rem] font-bold">PROGRESS</p>
++        <h1 className="text-[2.5rem] font-bold">Your results</h1>
++        <p className="text-[1.25rem] text-[#637789]">Words and verbs move up a box each time you get them right.</p>
++      </section>
++
++      <div className="w-full p-4">
++        <StatsView
++          words={words}
++          verbs={verbs}
++          tenses={tenses}
++        />
++      </div>
++    </>
++  );
++};
++
++export default StatsPage;
+diff --git a/app/verbs/conjugator/components/conjugator.tsx b/app/verbs/conjugator/components/conjugator.tsx
+index c743a4c..0aa0f12 100644
+--- a/app/verbs/conjugator/components/conjugator.tsx
++++ b/app/verbs/conjugator/components/conjugator.tsx
+@@ -2,13 +2,14 @@
+ 
+ import React, { useState, JSX } from "react";
+ 
+-import { RandomNumberArrayGenerator } from "@/lib/helpers";
+ import ScreenCard from "@/components/sessionCard";
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
++import { recordResults, verbKey } from "@/lib/progress";
+ import SummaryCard from "@/components/summaryCard";
+ 
+-import { getConjugationSet } from "@/lib/database"
++import { pickConjugationSets } from "@/lib/database";
+ 
+ import { Tense, Verb, ConjugationSet } from "@/types/verbs";
+ 
+@@ -67,6 +68,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+         ellos: "",
+     });
+ 
++    const emptyFor = (answer?: Conjugation): Conjugation => ({
++        ...emptyConjugation(),
++        yo: answer?.yo === "—" ? "—" : "",
++    });
++
+     const handleTenseChange = (value: number) => {
+         setSelectedTense(value);
+     };
+@@ -78,24 +84,10 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+         setNumberQuestions(Number(activeButton?.name ?? 0));
+     };
+ 
+-    const createQuestionSet = (): number[] => {
+-        const count = Math.min(numberQuestions, verbs.length);
+-        const set = RandomNumberArrayGenerator(0, verbs.length - 1, count);
+-        setQuestionSet(set);
+-        return set;
+-    };
+-
+-    const retrieveAnswers = async (set: number[]): Promise<Conjugation[]> => {
+-        if (set.length === 0) return [];
+-
+-        const conjugations = await Promise.all(
+-            set.map((index) => getConjugationSet(verbs[index].verbId, selectedTense))
+-        );
+-
+-        return conjugations.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
++    const toConjugations = (sets: ConjugationSet[]): Conjugation[] =>
++        sets.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
+             yo, tu, el, nosotros, vosotros, ellos,
+         }));
+-    };
+ 
+     const keys = ["yo", "tu", "el", "nosotros", "vosotros", "ellos"] as const;
+     const currentConjugations = correctAnswers[currentQuestion] ?? emptyConjugation();
+@@ -125,10 +117,11 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+     const handlePracticeClick = async () => {
+         setShowSession(false);
+ 
+-        const set = createQuestionSet();
+-        const answers: Conjugation[] = await retrieveAnswers(set);
++        const { indices, sets } = await pickConjugationSets(verbs, selectedTense, numberQuestions);
++        const answers = toConjugations(sets);
++        setQuestionSet(indices);
+         setCorrectAnswers(answers);
+-        setUserAnswers(emptyConjugation());
++        setUserAnswers(emptyFor(answers[0]));
+     };
+ 
+     const handleExitSessionClick = () => {
+@@ -149,6 +142,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+         const norm = (s: string) => s.trim().toLowerCase();
+         const numberCorrect = keys.filter((k) => norm(userAnswers[k]) === norm(currentAnswer[k])).length;
+         const isCorrect = numberCorrect === keys.length;
++        recordResults({ [verbKey(verbs[current].verbId, selectedTense)]: isCorrect });
+ 
+         setTotalCorrect((prev) => prev + numberCorrect);
+         setNumberCorrect((prev) => [...prev, numberCorrect]);
+@@ -189,7 +183,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+ 
+         setShowAnswer(false);
+         setCurrentQuestion(next);
+-        setUserAnswers(emptyConjugation());
++        setUserAnswers(emptyFor(correctAnswers[next]));
+     };
+ 
+     const handleSeeResultsClick = () => {
+@@ -257,6 +251,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+                                         </span>
+                                     </p>
+ 
++                                    <div className="mb-4"><SpeakButton text={verbs[current].infinitive} label="Listen to the verb" /></div>
+                                     <ul className="w-full">
+                                         <li
+                                             className= "flex justify-between text-[0.75rem] md:text-[1rem] lg:text-[1rem] w-full mb-4"
+@@ -265,6 +260,7 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+                                             <input
+                                                 type="text"
+                                                 name="yo"
++                                                readOnly={currentConjugations.yo === "—"}
+                                                 value={userAnswers.yo}
+                                                 onChange={handleUserAnswers}
+                                                 className="border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] font-[0.8rem] py-1 px-2 w-3/5"
+@@ -333,7 +329,10 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
+                                     </ul>
+ 
+                                     {showAnswer && conjugationsComplete ? (
+-                                        <div>{answerText}</div>
++                                        <div>
++<div>{answerText}</div>
++<div className="mt-3"><SpeakButton text={keys.map((key) => currentConjugations[key]).filter((form) => form !== "—").join(", ")} label="Listen to the forms" /></div>
++</div>
+                                     ) : null}
+                                 </>
+                             ) : null}
+diff --git a/app/verbs/flashcard/components/flashcard.tsx b/app/verbs/flashcard/components/flashcard.tsx
+index 961382d..1a5d35a 100644
+--- a/app/verbs/flashcard/components/flashcard.tsx
++++ b/app/verbs/flashcard/components/flashcard.tsx
+@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
+ import { getConjugationSet } from "../../../../lib/database";
+ 
+ import Dropdown from "../../../../components/dropdown";
++import SpeakButton from "../../../../components/speakButton";
+ import { Tense, Verb, ConjugationSet } from "../../../../types/verbs";
+ 
+ type FlashcardProps = {
+@@ -80,7 +81,10 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
+                         className="w-full flex justify-between mb-4 md:mb-6 lg:mb-6"
+                     >
+                         <div>
+-                            <h2 className="text-[2.25rem] font-bold">{currentVerb?.infinitive}</h2>
++                            <div className="flex place-items-center gap-2">
++<h2 className="text-[2.25rem] font-bold">{currentVerb?.infinitive}</h2>
++<SpeakButton text={currentVerb?.infinitive ?? ""} label="Listen to the verb" />
++</div>
+                             <p className="text-[#637789] text-[1.25rem]">{currentVerb?.translation}</p>
+                         </div>
+                         <div
+@@ -99,32 +103,32 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
+                                     <li
+                                         className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                     >
+-                                        <span>Yo</span> <span className="font-bold">{currentConjugations.yo}</span>
++                                        <span>Yo</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.yo}</span><SpeakButton text={currentConjugations.yo} className="!w-7 !h-7" /></span>
+                                     </li>
+                                     <li
+                                         className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                     >
+-                                        <span>Tú</span> <span className="font-bold">{currentConjugations.tu}</span>
++                                        <span>Tú</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.tu}</span><SpeakButton text={currentConjugations.tu} className="!w-7 !h-7" /></span>
+                                     </li>
+                                     <li
+                                         className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                     >
+-                                        <span>Él/Ella/Usted</span> <span className="font-bold">{currentConjugations.el}</span>
++                                        <span>Él/Ella/Usted</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.el}</span><SpeakButton text={currentConjugations.el} className="!w-7 !h-7" /></span>
+                                     </li>
+                                     <li
+                                         className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                     >
+-                                        <span>Nosotros/Nosotras</span> <span className="font-bold">{currentConjugations.nosotros}</span>
++                                        <span>Nosotros/Nosotras</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.nosotros}</span><SpeakButton text={currentConjugations.nosotros} className="!w-7 !h-7" /></span>
+                                     </li>
+                                     <li
+                                         className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                     >
+-                                        <span>Vosotros/Vosotras</span> <span className="font-bold">{currentConjugations.vosotros}</span>
++                                        <span>Vosotros/Vosotras</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.vosotros}</span><SpeakButton text={currentConjugations.vosotros} className="!w-7 !h-7" /></span>
+                                     </li>
+                                     <li
+                                         className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                     >
+-                                        <span>Ellos/Ellas/Ustedes</span> <span className="font-bold">{currentConjugations.ellos}</span>
++                                        <span>Ellos/Ellas/Ustedes</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.ellos}</span><SpeakButton text={currentConjugations.ellos} className="!w-7 !h-7" /></span>
+                                     </li>
+                                 </ul>
+                             ) : null
+diff --git a/app/verbs/slider/components/slider.tsx b/app/verbs/slider/components/slider.tsx
+index 1313c15..9b4b920 100644
+--- a/app/verbs/slider/components/slider.tsx
++++ b/app/verbs/slider/components/slider.tsx
+@@ -32,11 +32,13 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
+ import ScreenCard from "@/components/sessionCard";
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
++import { recordResults, verbKey } from "@/lib/progress";
+ import SortableTile from "@/components/sortableTile"
+ import Tile from "@/components/tile";
+ import SummaryCard from "@/components/summaryCard";
+ 
+-import { getConjugationSet } from "@/lib/database";
++import { pickConjugationSets } from "@/lib/database";
+ 
+ import { Tense, Verb, ConjugationSet } from "@/types/verbs";
+ 
+@@ -121,24 +123,10 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
+         setNumberQuestions(Number(activeButton?.name ?? 0));
+     };
+ 
+-    const createQuestionSet = (): number[] => {
+-        const count = Math.min(numberQuestions, verbs.length);
+-        const set = RandomNumberArrayGenerator(0, verbs.length - 1, count);
+-        setQuestionSet(set);
+-        return set;
+-    };
+-
+-    const retrieveAnswers = async (set: number[]): Promise<Conjugation[]> => {
+-        if (set.length === 0) return [];
+-
+-        const conjugations = await Promise.all(
+-            set.map((index) => getConjugationSet(verbs[index].verbId, selectedTense))
+-        );
+-
+-        return conjugations.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
++    const toConjugations = (sets: ConjugationSet[]): Conjugation[] =>
++        sets.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
+             yo, tu, el, nosotros, vosotros, ellos,
+         }));
+-    };
+ 
+     const keys = ["yo", "tu", "el", "nosotros", "vosotros", "ellos"] as const;
+ 
+@@ -154,8 +142,9 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
+     const handlePracticeClick = async () => {
+         setShowSession(false);
+ 
+-        const set = createQuestionSet();
+-        const answers: Conjugation[] = await retrieveAnswers(set);
++        const { indices, sets } = await pickConjugationSets(verbs, selectedTense, numberQuestions);
++        const answers = toConjugations(sets);
++        setQuestionSet(indices);
+         setCorrectAnswers(answers);
+         const userAnswers = createUserAnswers(answers);
+         setUserAnswers(userAnswers);
+@@ -176,6 +165,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
+         const currentCorrectAnswers = Object.values(correctAnswers[currentQuestion]);
+ 
+         const isCorrect = tiles.length === keys.length && tiles.every((tile, index) => tile.text === currentCorrectAnswers[index]);
++        recordResults({ [verbKey(verbs[current].verbId, selectedTense)]: isCorrect });
+ 
+         let numberCorrect = 0;
+         for(let i = 0; i < tiles.length; i++) {
+@@ -373,7 +363,10 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
+                                             </section>
+                                         </div>
+                                         {showAnswer && (
+-                                            <div>{answerText}</div>
++                                            <div>
++<div>{answerText}</div>
++<div className="mt-3"><SpeakButton text={keys.map((key) => correctAnswers[currentQuestion]?.[key] ?? "").filter((form) => form !== "—").join(", ")} label="Listen to the forms" /></div>
++</div>
+                                         )}
+ 
+                                     </>
+diff --git a/app/vocabulary/completion/components/completion.tsx b/app/vocabulary/completion/components/completion.tsx
+index a932753..d94dfad 100644
+--- a/app/vocabulary/completion/components/completion.tsx
++++ b/app/vocabulary/completion/components/completion.tsx
+@@ -6,6 +6,8 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
+ import ScreenCard from "@/components/sessionCard";
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
++import { pickIndicesByReview, recordResults, wordKey } from "@/lib/progress";
+ import SummaryCard from "@/components/summaryCard";
+ 
+ import { Category, Vocabulary } from "@/types/vocabulary";
+@@ -62,8 +64,7 @@ const Completion = ({ categories, entries }: CompletionProps) => {
+                 ? entries
+                 : entries.filter((entry) => entry.categoryId === category);
+ 
+-        const count = Math.min(numberQuestions, pool.length);
+-        const indexes = RandomNumberArrayGenerator(0, pool.length, count);
++        const indexes = pickIndicesByReview(pool, numberQuestions);
+ 
+         setQuestionSet(indexes.map((i: number) => pool[i]));
+         setCurrentQuestion(0);
+@@ -84,6 +85,7 @@ const Completion = ({ categories, entries }: CompletionProps) => {
+         const answer = answerRef.current?.value ?? "";
+ 
+         const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
++        recordResults({ [wordKey(current.wordId)]: isCorrect });
+ 
+         if (isCorrect) setNumberCorrect(prev => prev + 1);
+ 
+@@ -220,7 +222,10 @@ const Completion = ({ categories, entries }: CompletionProps) => {
+                                                 className="w-full border-[0.5px] border-gray-300 py-2 px-4 mb-4 rounded-[6px] bg-[#FFFAF2] text-[1.25rem]"
+                                             />
+                                             {showAnswer && (
+-                                                <div>{answerText}</div>
++                                                <div>
++<div>{answerText}</div>
++<div className="mt-3"><SpeakButton text={current.wordText} label="Listen to the word" /></div>
++</div>
+                                             )}
+                                         </>
+                                     ) : null
+diff --git a/app/vocabulary/fill-in/components/fill-in.tsx b/app/vocabulary/fill-in/components/fill-in.tsx
+index 3415425..722ea12 100644
+--- a/app/vocabulary/fill-in/components/fill-in.tsx
++++ b/app/vocabulary/fill-in/components/fill-in.tsx
+@@ -2,10 +2,11 @@
+ 
+ import { useState, useRef, JSX } from "react";
+ 
+-import { RandomNumberArrayGenerator } from "@/lib/helpers";
+ import ScreenCard from "@/components/sessionCard";
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
++import { pickIndicesByReview, recordResults, wordKey } from "@/lib/progress";
+ import SummaryCard from "@/components/summaryCard";
+ 
+ import { Category, Vocabulary } from "@/types/vocabulary";
+@@ -52,8 +53,7 @@ const FillIn = ({ categories, entries }: FillInProps) => {
+                 ? entries
+                 : entries.filter((entry) => entry.categoryId === category);
+ 
+-        const count = Math.min(numberQuestions, pool.length);
+-        const indexes = RandomNumberArrayGenerator(0, pool.length, count);
++        const indexes = pickIndicesByReview(pool, numberQuestions);
+ 
+         setQuestionSet(indexes.map((i: number) => pool[i]));
+         setCurrentQuestion(0);
+@@ -70,6 +70,7 @@ const FillIn = ({ categories, entries }: FillInProps) => {
+         const answer = answerRef.current?.value ?? "";
+ 
+         const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
++        recordResults({ [wordKey(current.wordId)]: isCorrect });
+ 
+         if (isCorrect) setNumberCorrect(prev => prev + 1);
+ 
+@@ -179,7 +180,10 @@ const FillIn = ({ categories, entries }: FillInProps) => {
+                                             className="w-full border-[0.5px] border-gray-300 py-2 px-4 mb-4 rounded-[6px] bg-[#FFFAF2] text-[1.25rem]"
+                                         />
+                                         {showAnswer && (
+-                                            <div>{answerText}</div>
++                                            <div>
++<div>{answerText}</div>
++<div className="mt-3"><SpeakButton text={current.wordText} label="Listen to the word" /></div>
++</div>
+                                         )}
+                                     </>
+                                 ) : null
+diff --git a/app/vocabulary/flashcard/components/flashcard.tsx b/app/vocabulary/flashcard/components/flashcard.tsx
+index 75cb215..34b829b 100644
+--- a/app/vocabulary/flashcard/components/flashcard.tsx
++++ b/app/vocabulary/flashcard/components/flashcard.tsx
+@@ -4,6 +4,7 @@ import { useState } from "react";
+ 
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
+ import { Category, Vocabulary } from "@/types/vocabulary";
+ 
+ type FlashcardProps = {
+@@ -69,6 +70,7 @@ const Flashcard = ({ categories, entries }: FlashcardProps ) => {
+           >
+               {studySet[currentEntry]?.wordText}
+           </p>
++          <SpeakButton text={studySet[currentEntry]?.wordText ?? ""} label="Listen to the word" className="mt-2" />
+           <p
+             style={{ marginBottom: "10px" }}
+           >
+diff --git a/app/vocabulary/quiz/components/quiz.tsx b/app/vocabulary/quiz/components/quiz.tsx
+index 2bc7844..8f61fa3 100644
+--- a/app/vocabulary/quiz/components/quiz.tsx
++++ b/app/vocabulary/quiz/components/quiz.tsx
+@@ -6,6 +6,8 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
+ import ScreenCard from "@/components/sessionCard";
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
++import { pickIndicesByReview, recordResults, wordKey } from "@/lib/progress";
+ import SummaryCard from "@/components/summaryCard";
+ import AnswerButton from "../components/answerButton";
+ 
+@@ -32,7 +34,7 @@ const shuffle = <T,>(items: T[]): T[] => {
+ };
+ 
+ const randomAnswers = (correctAnswer: string, entries: Vocabulary[]): string[] => {
+-    const pool = entries.filter((entry) => entry.wordText !== correctAnswer);
++    const pool = entries.filter((entry) => entry.translation !== correctAnswer);
+     const count = Math.min(3, pool.length);
+     const indexes = RandomNumberArrayGenerator(0, pool.length - 1, count);
+     const wrongAnswers = indexes.map((i: number) => pool[i].translation);
+@@ -73,8 +75,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
+                 ? entries
+                 : entries.filter((entry) => entry.categoryId === category);
+ 
+-        const count = Math.min(numberQuestions, pool.length);
+-        const indexes = RandomNumberArrayGenerator(0, pool.length, count);
++        const indexes = pickIndicesByReview(pool, numberQuestions);
+ 
+         setQuestionSet(indexes.map((i: number) => pool[i]));
+         setAnswerSet(indexes.map((i: number) => randomAnswers(pool[i].translation, entries)));
+@@ -97,6 +98,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
+         const answer = selectedAnswer;
+ 
+         const isCorrect = selectedAnswer === questionSet[currentQuestion].translation;
++        recordResults({ [wordKey(current.wordId)]: isCorrect });
+ 
+         if (isCorrect) setNumberCorrect(prev => prev + 1);
+ 
+@@ -191,6 +193,7 @@ const Quiz = ({ categories, entries }: QuizProps) => {
+                                         >
+                                             {current.wordText}
+                                         </span>
++                                        <SpeakButton text={current.wordText} label="Listen to the word" className="ml-3 align-middle" />
+                                         <p className="text-[1.5rem]">{current.pronunciation}</p>
+                                         <p
+                                             className="text-[#637789] text-[1.25rem] mt-4 mb-6"
+@@ -210,7 +213,10 @@ const Quiz = ({ categories, entries }: QuizProps) => {
+                                             ))}
+                                         </div>
+                                         {showAnswer && (
+-                                            <div>{answerText}</div>
++                                            <div>
++<div>{answerText}</div>
++<div className="mt-3"><SpeakButton text={current.wordText} label="Listen to the word" /></div>
++</div>
+                                         )}
+                                     </>
+                                 ) : null
+diff --git a/app/vocabulary/scramble/components/scramble.tsx b/app/vocabulary/scramble/components/scramble.tsx
+index f88e368..eacadbf 100644
+--- a/app/vocabulary/scramble/components/scramble.tsx
++++ b/app/vocabulary/scramble/components/scramble.tsx
+@@ -6,6 +6,8 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
+ import ScreenCard from "@/components/sessionCard";
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
++import { pickIndicesByReview, recordResults, wordKey } from "@/lib/progress";
+ import SummaryCard from "@/components/summaryCard";
+ 
+ import { Category, Vocabulary } from "@/types/vocabulary";
+@@ -83,8 +85,7 @@ const Scramble = ({ categories, entries }: ScrambleProps) => {
+                 ? entries
+                 : entries.filter((entry) => entry.categoryId === category);
+ 
+-        const count = Math.min(numberQuestions, pool.length);
+-        const indexes = RandomNumberArrayGenerator(0, pool.length - 1, count);
++        const indexes = pickIndicesByReview(pool, numberQuestions);
+ 
+         setQuestionSet(indexes.map((i: number) => pool[i]));
+         setCurrentQuestion(0);
+@@ -104,6 +105,7 @@ const Scramble = ({ categories, entries }: ScrambleProps) => {
+         const answer = answerRef.current?.value ?? "";
+ 
+         const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
++        recordResults({ [wordKey(current.wordId)]: isCorrect });
+ 
+         if (isCorrect) setNumberCorrect(prev => prev + 1);
+ 
+@@ -238,7 +240,10 @@ const Scramble = ({ categories, entries }: ScrambleProps) => {
+                                             className="w-full border-[0.5px] border-gray-300 px-4 py-2 mb-4 rounded-[6px] bg-[#FFFAF2] text-[1.25rem]"
+                                         />
+                                         {showAnswer && (
+-                                            <div>{answerText}</div>
++                                            <div>
++<div>{answerText}</div>
++<div className="mt-3"><SpeakButton text={current.wordText} label="Listen to the word" /></div>
++</div>
+                                         )}
+                                     </>
+                                 ) : null
+diff --git a/app/vocabulary/slider/components/slider.tsx b/app/vocabulary/slider/components/slider.tsx
+index 0762baa..e5f4ec9 100644
+--- a/app/vocabulary/slider/components/slider.tsx
++++ b/app/vocabulary/slider/components/slider.tsx
+@@ -33,6 +33,8 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
+ import ScreenCard from "@/components/sessionCard";
+ import Dropdown from "@/components/dropdown";
+ import Card from "@/components/card";
++import SpeakButton from "@/components/speakButton";
++import { recordResults, wordKey } from "@/lib/progress";
+ import Tile from "@/components/tile";
+ import SortableTile from "@/components/sortableTile"
+ import SummaryCard from "@/components/summaryCard";
+@@ -104,7 +106,7 @@ const Slider = ({ categories, entries }: SliderProps) => {
+ 
+         const createWordSet = (): number[] => {
+             const count = Math.min(numberQuestions, filteredEntries.length);
+-            return RandomNumberArrayGenerator(0, filteredEntries.length, count);
++            return RandomNumberArrayGenerator(0, filteredEntries.length - 1, count);
+         };
+ 
+         const sets = Array.from({ length: numberQuestions }, createWordSet);
+@@ -129,6 +131,11 @@ const Slider = ({ categories, entries }: SliderProps) => {
+         for(let i = 0; i < current.length; i++) {
+             if (current[i] === userAnswers[i]) numberCorrect++;
+         }
++        const outcomes: Record<string, boolean> = {};
++        current.forEach((entry, i) => {
++            outcomes[wordKey(filteredEntries[entry].wordId)] = entry === userAnswers[i];
++        });
++        recordResults(outcomes);
+ 
+         setTotalCorrect((prev) => prev + numberCorrect);
+ 
+@@ -295,7 +302,10 @@ const Slider = ({ categories, entries }: SliderProps) => {
+                                             </section>
+                                         </div>
+                                         {showAnswer && (
+-                                            <div>{answerText}</div>
++                                            <div>
++<div>{answerText}</div>
++<div className="mt-3"><SpeakButton text={current.map((entry) => filteredEntries[entry].wordText).join(", ")} label="Listen to the words" /></div>
++</div>
+                                         )}
+ 
+                                     </>
+diff --git a/components/homeCard.tsx b/components/homeCard.tsx
+index 4b447dc..8a1ed58 100644
+--- a/components/homeCard.tsx
++++ b/components/homeCard.tsx
+@@ -12,7 +12,8 @@ type HomeCardProps = {
+     tagline: string;
+     hrefColor: hrefColorType;
+     href: string;
+-
++    label?: string;
++    cta?: string;
+ }
+ 
+ const HomeCard = ({
+@@ -21,7 +22,9 @@ const HomeCard = ({
+     title,
+     tagline,
+     hrefColor,
+-    href
++    href,
++    label = "DRILL",
++    cta = "Practice"
+ }: HomeCardProps) => {
+     return (
+         <div
+@@ -39,7 +42,7 @@ const HomeCard = ({
+                 >
+                     {buttonText}
+                 </div>
+-                <div className="text-[0.8rem] text-[#84929f]">DRILL</div>
++                <div className="text-[0.8rem] text-[#84929f]">{label}</div>
+             </div>
+             <section
+                 className="mt-2 mb-2"
+@@ -59,7 +62,7 @@ const HomeCard = ({
+                         color: hrefColor === "red" ? "#C9362B" : "#000000"
+                     }}
+                 >
+-                    Practice &#8594;
++                    {cta} &#8594;
+                     </Link>
+             </div>
+         </div>
+diff --git a/components/speakButton.tsx b/components/speakButton.tsx
+new file mode 100644
+index 0000000..0b9ee87
+--- /dev/null
++++ b/components/speakButton.tsx
+@@ -0,0 +1,64 @@
++"use client";
++
++import { useEffect, useState, useSyncExternalStore } from "react";
++
++import { speak, speechSupported, warmUp } from "@/lib/speech";
++
++type SpeakButtonProps = {
++    text: string;
++    label?: string;
++    className?: string;
++};
++
++const subscribe = () => () => {};
++
++const SpeakButton = ({ text, label = "Listen", className = "" }: SpeakButtonProps) => {
++    const supported = useSyncExternalStore(subscribe, speechSupported, () => false);
++    const [missingVoice, setMissingVoice] = useState<boolean>(false);
++
++    useEffect(() => {
++        if (supported) warmUp();
++    }, [supported]);
++
++    if (!supported || !/\p{L}/u.test(text)) return null;
++
++    const handleClick = async () => {
++        const spoke = await speak(text);
++        setMissingVoice(!spoke);
++    };
++
++    return (
++        <span className="inline-flex items-center">
++            <button
++                type="button"
++                onClick={handleClick}
++                aria-label={`${label}: ${text}`}
++                title={label}
++                className={`inline-flex items-center justify-center w-9 h-9 shrink-0 rounded-[6px] border-[0.5px] border-gray-300 bg-[#FFF8EB] text-[#C9362B] hover:bg-[#F2B441] ${className}`}
++            >
++                <svg
++                    viewBox="0 0 24 24"
++                    width="18"
++                    height="18"
++                    fill="none"
++                    stroke="currentColor"
++                    strokeWidth="2"
++                    strokeLinecap="round"
++                    strokeLinejoin="round"
++                    aria-hidden="true"
++                >
++                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
++                    <path d="M15.5 8.5a5 5 0 0 1 0 7" />
++                    <path d="M19 5a10 10 0 0 1 0 14" />
++                </svg>
++            </button>
++            {missingVoice ? (
++                <span role="status" className="ml-2 text-[0.8rem] text-[#C9362B]">
++                    No Spanish voice installed on this device
++                </span>
++            ) : null}
++        </span>
++    );
++};
++
++export default SpeakButton;
+diff --git a/lib/database.ts b/lib/database.ts
+index beaf0cb..80715f9 100644
+--- a/lib/database.ts
++++ b/lib/database.ts
+@@ -1,4 +1,5 @@
+-import { ConjugationSet } from "../types/verbs";
++import { ConjugationSet, Verb } from "../types/verbs";
++import { shuffleArray } from "./helpers";
+ 
+ const url = process.env.NEXT_PUBLIC_API_URL;
+ 
+@@ -55,4 +56,51 @@ export const getConjugationSet = async (verbId: number, tenseId: number): Promis
+ 
+         throw error;
+     }
+-}
+\ No newline at end of file
++}
++
++// Returns null when a verb has no conjugation for the tense (for example "haber" has no imperative).
++export const getConjugationSetOrNull = async (verbId: number, tenseId: number): Promise<ConjugationSet | null> => {
++    const response = await fetch(`${url}/api/verbs/${verbId}/conjugations-wide/tense/${tenseId}`, { cache: "no-store" });
++
++    if (response.status === 404 || response.status === 204) return null;
++
++    if (!response.ok) {
++        throw new Error(`Failed to fetch conjugation set: ${response.status}`);
++    }
++
++    const text = await response.text();
++    if (!text) return null;
++
++    const data = JSON.parse(text) as ConjugationSet | null;
++
++    return data && typeof data.yo === "string" ? data : null;
++};
++
++// Picks up to `count` random verbs that actually have the tense and returns their indexes with their conjugations.
++export const pickConjugationSets = async (
++    verbs: Verb[],
++    tenseId: number,
++    count: number
++): Promise<{ indices: number[]; sets: ConjugationSet[] }> => {
++    const wanted = Math.min(count, verbs.length);
++    const order = shuffleArray(verbs.map((_, index) => index));
++    const indices: number[] = [];
++    const sets: ConjugationSet[] = [];
++    let cursor = 0;
++
++    while (indices.length < wanted && cursor < order.length) {
++        const batch = order.slice(cursor, cursor + (wanted - indices.length));
++        cursor += batch.length;
++
++        const found = await Promise.all(batch.map((i) => getConjugationSetOrNull(verbs[i].verbId, tenseId)));
++
++        found.forEach((set, k) => {
++            if (set) {
++                indices.push(batch[k]);
++                sets.push(set);
++            }
++        });
++    }
++
++    return { indices, sets };
++};
+diff --git a/lib/helpers.ts b/lib/helpers.ts
+index 1b25c29..380be68 100644
+--- a/lib/helpers.ts
++++ b/lib/helpers.ts
+@@ -11,3 +11,14 @@ export const RandomNumberArrayGenerator = (min: number, max: number, length: num
+ 
+     return randomNumbers;
+ };
++
++export const shuffleArray = <T,>(items: T[]): T[] => {
++    const copy = [...items];
++
++    for (let i = copy.length - 1; i > 0; i--) {
++        const j = Math.floor(Math.random() * (i + 1));
++        [copy[i], copy[j]] = [copy[j], copy[i]];
++    }
++
++    return copy;
++};
+diff --git a/lib/progress.ts b/lib/progress.ts
+new file mode 100644
+index 0000000..3cded7f
+--- /dev/null
++++ b/lib/progress.ts
+@@ -0,0 +1,158 @@
++import { Vocabulary } from "@/types/vocabulary";
++
++// Leitner-style spaced repetition kept in the browser (localStorage).
++// Keys: "w:<wordId>" for vocabulary, "v:<verbId>:<tenseId>" for a verb in a tense.
++
++export type ProgressItem = {
++    box: number;    // 1..5
++    hits: number;
++    misses: number;
++    seen: number;   // ms since epoch
++    due: number;    // ms since epoch
++};
++
++export type ProgressMap = Record<string, ProgressItem>;
++
++export type Summary = {
++    practiced: number;
++    mastered: number;
++    due: number;
++    hits: number;
++    misses: number;
++};
++
++export const STORAGE_KEY = "spanish-tutor-progress-v1";
++export const CHANGE_EVENT = "spanish-tutor-progress-change";
++
++const DAY = 86_400_000;
++const INTERVAL_DAYS = [0, 0, 1, 3, 7, 14]; // review delay by box (index = box)
++const MAX_BOX = 5;
++const MASTERED_BOX = 4;
++
++export const wordKey = (wordId: number): string => `w:${wordId}`;
++export const verbKey = (verbId: number, tenseId: number): string => `v:${verbId}:${tenseId}`;
++
++export const readRaw = (): string | null => {
++    try {
++        return window.localStorage.getItem(STORAGE_KEY);
++    } catch {
++        return null;
++    }
++};
++
++const isItem = (value: unknown): value is ProgressItem => {
++    if (typeof value !== "object" || value === null) return false;
++    const item = value as Record<string, unknown>;
++    return ["box", "hits", "misses", "seen", "due"].every((field) => typeof item[field] === "number");
++};
++
++export const parseProgress = (raw: string | null): ProgressMap => {
++    if (!raw) return {};
++
++    try {
++        const data: unknown = JSON.parse(raw);
++        if (typeof data !== "object" || data === null) return {};
++
++        return Object.fromEntries(Object.entries(data).filter(([, value]) => isItem(value))) as ProgressMap;
++    } catch {
++        return {};
++    }
++};
++
++const save = (map: ProgressMap): void => {
++    try {
++        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
++        window.dispatchEvent(new Event(CHANGE_EVENT));
++    } catch {
++        // storage unavailable (private mode, quota) - progress just isn't kept
++    }
++};
++
++/** outcomes: item key -> answered correctly */
++export const recordResults = (outcomes: Record<string, boolean>): void => {
++    if (typeof window === "undefined") return;
++
++    const entries = Object.entries(outcomes);
++    if (entries.length === 0) return;
++
++    const map = parseProgress(readRaw());
++    const now = Date.now();
++
++    for (const [key, correct] of entries) {
++        const old = map[key];
++        const box = correct ? Math.min((old?.box ?? 1) + 1, MAX_BOX) : 1;
++
++        map[key] = {
++            box,
++            hits: (old?.hits ?? 0) + (correct ? 1 : 0),
++            misses: (old?.misses ?? 0) + (correct ? 0 : 1),
++            seen: now,
++            due: now + INTERVAL_DAYS[box] * DAY,
++        };
++    }
++
++    save(map);
++};
++
++export const resetProgress = (): void => {
++    if (typeof window === "undefined") return;
++
++    try {
++        window.localStorage.removeItem(STORAGE_KEY);
++        window.dispatchEvent(new Event(CHANGE_EVENT));
++    } catch {
++        // ignore
++    }
++};
++
++/**
++ * Picks `count` indexes into `pool`: words due for review first,
++ * then words never practiced, then words not yet due.
++ */
++export const pickIndicesByReview = (pool: Vocabulary[], count: number): number[] => {
++    const map = parseProgress(readRaw());
++    const now = Date.now();
++
++    const scored = pool.map((entry, index) => {
++        const item = map[wordKey(entry.wordId)];
++        const bucket = !item ? 1 : item.due <= now ? 0 : 2;
++
++        return { index, bucket, due: item && item.due > now ? item.due : 0, tie: Math.random() };
++    });
++
++    scored.sort((a, b) => a.bucket - b.bucket || a.due - b.due || a.tie - b.tie);
++
++    return scored.slice(0, Math.min(count, pool.length)).map((s) => s.index);
++};
++
++export const summarize = (map: ProgressMap, prefix: "w" | "v", now: number): Summary => {
++    const summary: Summary = { practiced: 0, mastered: 0, due: 0, hits: 0, misses: 0 };
++
++    for (const [key, item] of Object.entries(map)) {
++        if (!key.startsWith(`${prefix}:`)) continue;
++
++        summary.practiced++;
++        if (item.box >= MASTERED_BOX) summary.mastered++;
++        if (item.due <= now) summary.due++;
++        summary.hits += item.hits;
++        summary.misses += item.misses;
++    }
++
++    return summary;
++};
++
++export const accuracyOf = (summary: Summary): number | null => {
++    const total = summary.hits + summary.misses;
++    return total === 0 ? null : Math.round((100 * summary.hits) / total);
++};
++
++export const troubleKeys = (
++    map: ProgressMap,
++    prefix: "w" | "v",
++    limit = 8
++): { key: string; misses: number }[] =>
++    Object.entries(map)
++        .filter(([key, item]) => key.startsWith(`${prefix}:`) && item.misses > 0)
++        .sort((a, b) => b[1].misses - a[1].misses)
++        .slice(0, limit)
++        .map(([key, item]) => ({ key, misses: item.misses }));
+diff --git a/lib/speech.ts b/lib/speech.ts
+new file mode 100644
+index 0000000..1dece8e
+--- /dev/null
++++ b/lib/speech.ts
+@@ -0,0 +1,72 @@
++const PREFERRED_LANG = "es-ES"; // use "es-MX" or "es-US" if you prefer a Latin American voice
++
++const normalizeLang = (lang: string): string => lang.replace("_", "-");
++
++export const speechSupported = (): boolean =>
++    typeof window !== "undefined" &&
++    "speechSynthesis" in window &&
++    "SpeechSynthesisUtterance" in window;
++
++// Browsers load their voice list asynchronously, so wait for it (up to 1.5s) before choosing.
++const voicesReady = (): Promise<void> =>
++    new Promise((resolve) => {
++        const synth = window.speechSynthesis;
++        if (synth.getVoices().length > 0) return resolve();
++
++        const done = () => {
++            synth.removeEventListener("voiceschanged", done);
++            resolve();
++        };
++
++        synth.addEventListener("voiceschanged", done);
++        setTimeout(done, 1500);
++    });
++
++const score = (voice: SpeechSynthesisVoice): number => {
++    let points = 0;
++
++    if (normalizeLang(voice.lang) === PREFERRED_LANG) points += 4;
++    if (/natural|neural|online/i.test(voice.name)) points += 3; // Edge / Windows neural voices
++    if (/google/i.test(voice.name)) points += 2;
++
++    return points;
++};
++
++export const bestSpanishVoice = (): SpeechSynthesisVoice | null => {
++    const spanish = window.speechSynthesis
++        .getVoices()
++        .filter((voice) => normalizeLang(voice.lang).toLowerCase().startsWith("es"));
++
++    if (spanish.length === 0) return null;
++
++    return spanish.reduce((best, voice) => (score(voice) > score(best) ? voice : best));
++};
++
++export const warmUp = (): void => {
++    if (speechSupported()) window.speechSynthesis.getVoices();
++};
++
++/**
++ * Speaks the text with a Spanish voice. Returns false (and says nothing) when the
++ * device has no Spanish voice, rather than reading Spanish with an English voice.
++ */
++export const speak = async (text: string): Promise<boolean> => {
++    if (!speechSupported() || !/\p{L}/u.test(text)) return false;
++
++    await voicesReady();
++
++    const voice = bestSpanishVoice();
++    if (!voice) return false;
++
++    const synth = window.speechSynthesis;
++    synth.cancel();
++
++    const utterance = new SpeechSynthesisUtterance(text);
++    utterance.voice = voice;
++    utterance.lang = voice.lang;
++    utterance.rate = 0.9;
++
++    synth.speak(utterance);
++
++    return true;
++};
+diff --git a/lib/useProgress.ts b/lib/useProgress.ts
+new file mode 100644
+index 0000000..b35581d
+--- /dev/null
++++ b/lib/useProgress.ts
+@@ -0,0 +1,26 @@
++"use client";
++
++import { useMemo, useSyncExternalStore } from "react";
++
++import { CHANGE_EVENT, parseProgress, ProgressMap, readRaw } from "./progress";
++
++const subscribe = (callback: () => void) => {
++    window.addEventListener("storage", callback);
++    window.addEventListener(CHANGE_EVENT, callback);
++
++    return () => {
++        window.removeEventListener("storage", callback);
++        window.removeEventListener(CHANGE_EVENT, callback);
++    };
++};
++
++export const useProgress = (): ProgressMap => {
++    const raw = useSyncExternalStore(subscribe, readRaw, () => null);
++
++    return useMemo(() => parseProgress(raw), [raw]);
++};
++
++const subscribeNever = () => () => {};
++
++export const useHydrated = (): boolean =>
++    useSyncExternalStore(subscribeNever, () => true, () => false);

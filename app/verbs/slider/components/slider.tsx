@@ -32,11 +32,13 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
 import ScreenCard from "@/components/sessionCard";
 import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
+import SpeakButton from "@/components/speakButton";
+import { recordResults, verbKey } from "@/lib/progress";
 import SortableTile from "@/components/sortableTile"
 import Tile from "@/components/tile";
 import SummaryCard from "@/components/summaryCard";
 
-import { getConjugationSet } from "@/lib/database";
+import { pickConjugationSets } from "@/lib/database";
 
 import { Tense, Verb, ConjugationSet } from "@/types/verbs";
 
@@ -121,24 +123,10 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
         setNumberQuestions(Number(activeButton?.name ?? 0));
     };
 
-    const createQuestionSet = (): number[] => {
-        const count = Math.min(numberQuestions, verbs.length);
-        const set = RandomNumberArrayGenerator(0, verbs.length - 1, count);
-        setQuestionSet(set);
-        return set;
-    };
-
-    const retrieveAnswers = async (set: number[]): Promise<Conjugation[]> => {
-        if (set.length === 0) return [];
-
-        const conjugations = await Promise.all(
-            set.map((index) => getConjugationSet(verbs[index].verbId, selectedTense))
-        );
-
-        return conjugations.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
+    const toConjugations = (sets: ConjugationSet[]): Conjugation[] =>
+        sets.map(({ yo, tu, el, nosotros, vosotros, ellos }) => ({
             yo, tu, el, nosotros, vosotros, ellos,
         }));
-    };
 
     const keys = ["yo", "tu", "el", "nosotros", "vosotros", "ellos"] as const;
 
@@ -154,8 +142,9 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
     const handlePracticeClick = async () => {
         setShowSession(false);
 
-        const set = createQuestionSet();
-        const answers: Conjugation[] = await retrieveAnswers(set);
+        const { indices, sets } = await pickConjugationSets(verbs, selectedTense, numberQuestions);
+        const answers = toConjugations(sets);
+        setQuestionSet(indices);
         setCorrectAnswers(answers);
         const userAnswers = createUserAnswers(answers);
         setUserAnswers(userAnswers);
@@ -176,6 +165,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
         const currentCorrectAnswers = Object.values(correctAnswers[currentQuestion]);
 
         const isCorrect = tiles.length === keys.length && tiles.every((tile, index) => tile.text === currentCorrectAnswers[index]);
+        recordResults({ [verbKey(verbs[current].verbId, selectedTense)]: isCorrect });
 
         let numberCorrect = 0;
         for(let i = 0; i < tiles.length; i++) {
@@ -285,26 +275,26 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                             SPANISH ENGLISH
                                         </p>
                                         <h2
-                                            className="text-[2rem] font-bold mb-2"
+                                            className="text-[1.25rem] md:text-[2rem] lg:text-[2rem] font-bold mb-2"
                                         >
                                             Arrange the matches
                                         </h2>
                                         <p
-                                            className="text-[1rem] text-[#637789] mb-4"
+                                            className="text-[0.8rem] md:text-[1rem] lg:text-[1rem] text-[#637789] mb-4"
                                         >
                                             Drag the Spanish tiles up or down until each one sits beside its match.
                                         </p>
 
                                         <div
-                                            className="flex items-center justify-between space-x-2 mb-4"
+                                            className="flex items-center justify-between space-x-2 mb-8"
                                         >
                                             <span
-                                                className="bg-[#000000] text-[#FFF8E8] text-[2rem] font-bold rounded-[6px] py-2 px-4"
+                                                className="bg-[#000000] text-[#FFF8E8] text-[1.25rem] md:text-[2rem] lg:text-[2rem] font-bold rounded-[6px] py-2 px-4"
                                             >
                                                 {verbs[current].infinitive}
                                             </span>
                                             <span
-                                                className="bg-[#F2B441] text-[#000000] text-[1rem] rounded-[6px] py-1 px-4"
+                                                className="text-[0.75rem] md:text-[1rem] lg:text-[1rem] bg-[#F2B441] rounded-[6px] font-bold py-2 px-4"
                                             >
                                                 {currentTense}
                                             </span>
@@ -317,7 +307,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                                 className="w-1/2 mr-2"
                                             >
                                                 <h3
-                                                    className="text-[1rem] text-[#637789] font-semibold mb-3"
+                                                    className="text-[0.8rem] md:text-[1rem] lg:text-[1rem] text-[#637789] font-semibold mb-3"
                                                 >
                                                     PRONOUN
                                                 </h3>
@@ -349,7 +339,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
 
                                             <section className="w-1/2" style={{ marginLeft: "5px" }}>
                                                 <h3
-                                                    className="text-[1rem] text-[#637789] font-semibold mb-3"
+                                                    className="text-[0.8rem] md:text-[1rem] lg:text-[1rem] text-[#637789] font-semibold mb-3"
                                                 >
                                                     SPANISH
                                                 </h3>
@@ -373,7 +363,10 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                             </section>
                                         </div>
                                         {showAnswer && (
-                                            <div>{answerText}</div>
+                                            <div>
+<div>{answerText}</div>
+<div className="mt-3"><SpeakButton text={keys.map((key) => correctAnswers[currentQuestion]?.[key] ?? "").filter((form) => form !== "—").join(", ")} label="Listen to the forms" /></div>
+</div>
                                         )}
 
                                     </>

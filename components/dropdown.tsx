@@ -42,7 +42,7 @@ const Dropdown = <K extends OptionType>({
                 id={id}
                 value={value}
                 onChange={(e) => onChange(Number(e.target.value))}
-                className="p-2 text-[#17324D] bg-[#FFFDF7] text-[1rem] border-[0.5px] border-gray-300 rounded-[6px] font-semibold"
+                className="p-2 text-[#17324D] bg-[#FFFDF7] text-[0.75rem] md:text-[1.1rem] lg:text-[1.1rem] border-[0.5px] border-gray-300 rounded-[6px] font-semibold"
             >
                 {firstOption && <option value={0} disabled>{firstOption}</option>}
                 {items.map((item) => (

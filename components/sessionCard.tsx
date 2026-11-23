@@ -55,7 +55,7 @@ const SessionCard = ({ children, onPracticeClick, onSessionButtonClick, sessionS
             <button
                 type="button"
                 onClick={onPracticeClick}
-                className="bg-[#C9362B] text-[#FFFDF7] text-[1.25rem] rounded-[6px] py-2 mt-4"
+                className="bg-[#C9362B] text-[#FFFDF7] text-[0.8rem] md:text-[1.25rem] lg:text-[1.25rem] rounded-[6px] py-2 mt-4"
             >
                 Begin practice &#8594;
             </button>

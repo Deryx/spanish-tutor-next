@@ -6,6 +6,8 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
 import ScreenCard from "@/components/sessionCard";
 import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
+import SpeakButton from "@/components/speakButton";
+import { pickIndicesByReview, recordResults, wordKey } from "@/lib/progress";
 import SummaryCard from "@/components/summaryCard";
 
 import { Category, Vocabulary } from "@/types/vocabulary";
@@ -83,8 +85,7 @@ const Scramble = ({ categories, entries }: ScrambleProps) => {
                 ? entries
                 : entries.filter((entry) => entry.categoryId === category);
 
-        const count = Math.min(numberQuestions, pool.length);
-        const indexes = RandomNumberArrayGenerator(0, pool.length - 1, count);
+        const indexes = pickIndicesByReview(pool, numberQuestions);
 
         setQuestionSet(indexes.map((i: number) => pool[i]));
         setCurrentQuestion(0);
@@ -104,6 +105,7 @@ const Scramble = ({ categories, entries }: ScrambleProps) => {
         const answer = answerRef.current?.value ?? "";
 
         const isCorrect = answer.trim().toLowerCase() === current.wordText.toLowerCase();
+        recordResults({ [wordKey(current.wordId)]: isCorrect });
 
         if (isCorrect) setNumberCorrect(prev => prev + 1);
 
@@ -238,7 +240,10 @@ const Scramble = ({ categories, entries }: ScrambleProps) => {
                                             className="w-full border-[0.5px] border-gray-300 px-4 py-2 mb-4 rounded-[6px] bg-[#FFFAF2] text-[1.25rem]"
                                         />
                                         {showAnswer && (
-                                            <div>{answerText}</div>
+                                            <div>
+<div>{answerText}</div>
+<div className="mt-3"><SpeakButton text={current.wordText} label="Listen to the word" /></div>
+</div>
                                         )}
                                     </>
                                 ) : null

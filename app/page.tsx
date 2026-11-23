@@ -35,6 +35,16 @@ const HomePage = () => {
           >
               Vocabulary
           </a>
+          <Link
+            className="text-[1rem]"
+            style={{
+              padding: "5px 8px",
+              color: "#84929f"
+            }}
+            href="/stats"
+          >
+              Progress
+          </Link>
         </div>
 
         <div
@@ -198,7 +208,7 @@ const HomePage = () => {
           </div>
 
           <div
-            className="mb-10 grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 h-full mt-5"
+            className="mb-0 md:mb-10 lg:mb-10 grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 md:h-full lg:h-full mt-3 md:mt-5 lg:mt-5"
           >
             <HomeCard
               buttonColor='red'
@@ -227,7 +237,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="w-full p-4 mt-25 md:mt-[-40px] lg:mt-[-40px]">
+        <section className="w-full p-4 md:mt-[-40px] lg:mt-[-40px]">
           <div
             className="grid grid-cols-1 gap-3 lg:flex w-full justify-between border-b-[0.5px] border-gray-300"
           >
@@ -252,7 +262,7 @@ const HomePage = () => {
           </div>
 
           <div
-            className="grid grid-cols-1 gap-3 md:grid-cols-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 h-full mt-5"
+            className="md:mb-10 lg:mb-10 grid grid-cols-1 gap-3 md:grid-cols-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 md:h-full lg:h-full mt-3 md:mt-5 lg:mt-5"
           >
             <HomeCard
               buttonColor='yellow'
@@ -309,10 +319,47 @@ const HomePage = () => {
             />
           </div>
         </section>
+
+        <section className="w-full p-4 md:mt-[-20px] lg:mt-[-20px]">
+          <div className="grid grid-cols-1 gap-3 lg:flex w-full justify-between border-b-[0.5px] border-gray-300">
+            <div>
+              <span
+                className="text-[1rem] font-semibold"
+                style={{ color: "#c9362b" }}
+              >
+                (C) PROGRESS
+              </span>
+              <h2 className="text-[1rem] font-bold">Your results</h2>
+            </div>
+            <div>
+              <p className="text-[1rem] text-[#c9362b] font-semibold">&nbsp;</p>
+              <div
+                className="mt-[-15px] md:mt-[0] text-[1rem] text-[#637789]"
+              >
+                Accuracy, words due for review, and the ones you miss most
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 mt-5"
+          >
+            <HomeCard
+              buttonColor='red'
+              buttonText='01'
+              title='Progress'
+              tagline='See what you have mastered and what is due for review.'
+              href='/stats'
+              hrefColor='red'
+              label='STATS'
+              cta='View'
+            />
+          </div>
+        </section>
       </main>
 
       <footer
-        className="w-full shrink-0 px-4 pt-5 pb-5 mt-30 md:mt-5 border-gray-300 border-t-[0.5px]"
+        className="w-full shrink-0 px-4 pt-5 pb-5 md:mt-5 border-gray-300 border-t-[0.5px]"
       >
         <div>
           <Logo />

@@ -33,6 +33,8 @@ import { RandomNumberArrayGenerator } from "@/lib/helpers";
 import ScreenCard from "@/components/sessionCard";
 import Dropdown from "@/components/dropdown";
 import Card from "@/components/card";
+import SpeakButton from "@/components/speakButton";
+import { recordResults, wordKey } from "@/lib/progress";
 import Tile from "@/components/tile";
 import SortableTile from "@/components/sortableTile"
 import SummaryCard from "@/components/summaryCard";
@@ -104,7 +106,7 @@ const Slider = ({ categories, entries }: SliderProps) => {
 
         const createWordSet = (): number[] => {
             const count = Math.min(numberQuestions, filteredEntries.length);
-            return RandomNumberArrayGenerator(0, filteredEntries.length, count);
+            return RandomNumberArrayGenerator(0, filteredEntries.length - 1, count);
         };
 
         const sets = Array.from({ length: numberQuestions }, createWordSet);
@@ -129,6 +131,11 @@ const Slider = ({ categories, entries }: SliderProps) => {
         for(let i = 0; i < current.length; i++) {
             if (current[i] === userAnswers[i]) numberCorrect++;
         }
+        const outcomes: Record<string, boolean> = {};
+        current.forEach((entry, i) => {
+            outcomes[wordKey(filteredEntries[entry].wordId)] = entry === userAnswers[i];
+        });
+        recordResults(outcomes);
 
         setTotalCorrect((prev) => prev + numberCorrect);
 
@@ -295,7 +302,10 @@ const Slider = ({ categories, entries }: SliderProps) => {
                                             </section>
                                         </div>
                                         {showAnswer && (
-                                            <div>{answerText}</div>
+                                            <div>
+<div>{answerText}</div>
+<div className="mt-3"><SpeakButton text={current.map((entry) => filteredEntries[entry].wordText).join(", ")} label="Listen to the words" /></div>
+</div>
                                         )}
 
                                     </>

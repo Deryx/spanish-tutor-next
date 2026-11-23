@@ -13,9 +13,9 @@ const FillInPage = async() => {
       <section
         className="p-4 border-y-[0.5px] border-gray-300"
       >
-        <p className="text-[#c9362b] text-[1.25rem] font-bold">VOCABULARY · RECALL</p>
-        <h1 className="text-[2.25rem] font-bold">Fill-in</h1>
-        <p className="text-[1.25rem] text-[#637789]">Translate each English prompt into Spanish.</p>
+        <p className="text-[#c9362b] text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] font-bold">VOCABULARY · RECALL</p>
+        <h1 className="text-[1.5rem] md:text-[2.25rem] lg:text-[2.25rem] font-bold">Fill-in</h1>
+        <p className="text-[1rem] md:text-[1.25rem] lg:text-[1.25rem] text-[#637789]">Translate each English prompt into Spanish.</p>
       </section>
 
       <div className="p-4">
