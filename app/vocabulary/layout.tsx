@@ -10,7 +10,7 @@ const VocabularyLayout = ({
             >
                 <Logo />
                 <div
-                    className="text-[1rem] text-[#84929f] font-bold"
+                    className="text-[0.75rem] md:text-[1rem] lg:text-[1rem] text-[#84929f] font-bold"
                 >
                     PRACTICE LIBRARY
                 </div>

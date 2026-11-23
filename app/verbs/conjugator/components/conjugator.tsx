@@ -235,21 +235,30 @@ const Conjugator = ({ tenses, verbs }: ConjugatorProps) => {
                         <>
                             {current !== undefined && verbs[current].infinitive ? (
                                 <>
-                                    <p
+                                    <div
                                         className="w-full flex justify-between place-items-center mb-10 text-[1.25rem]"
                                     >
-                                        <span
-                                            className="text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] text-[#FFF8EB] bg-[#000000] rounded-[6px] font-bold py-2 px-4"
-                                        >
-                                            {verbs[current].infinitive}
-                                        </span>
+                                        <div className="flex place-items-center">
+                                            <span
+                                                className="text-[0.75rem] md:text-[1.25rem] lg:text-[1.25rem] text-[#FFF8EB] bg-[#000000] rounded-[6px] font-bold py-2 px-4"
+                                            >
+                                                {verbs[current].infinitive}
+                                            </span>
+                                            <span
+                                                className="ml-2"
+                                            >
+                                                <SpeakButton text={verbs[current].infinitive} />
+                                            </span>
+                                        </div>
 
-                                        <span
-                                            className="text-[0.75rem] md:text-[1rem] lg:text-[1rem] bg-[#F2B441] rounded-[6px] font-bold py-2 px-4"
-                                        >
-                                            {tenses.find((tense) => tense.tenseId === selectedTense)?.tenseText}
-                                        </span>
-                                    </p>
+                                        <div>
+                                            <span
+                                                className="text-[0.75rem] md:text-[1rem] lg:text-[1rem] bg-[#F2B441] rounded-[6px] font-bold py-2 px-4"
+                                            >
+                                                {tenses.find((tense) => tense.tenseId === selectedTense)?.tenseText}
+                                            </span>
+                                        </div>
+                                    </div>
 
                                     <ul className="w-full">
                                         <li

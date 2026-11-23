@@ -288,11 +288,14 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                         <div
                                             className="flex items-center justify-between space-x-2 mb-8"
                                         >
-                                            <span
-                                                className="bg-[#000000] text-[#FFF8E8] text-[1.25rem] md:text-[2rem] lg:text-[2rem] font-bold rounded-[6px] py-2 px-4"
-                                            >
-                                                {verbs[current].infinitive}
-                                            </span>
+                                            <div className="flex place-items-center gap-2">
+                                                <span
+                                                    className="bg-[#000000] text-[#FFF8E8] text-[0.75rem] md:text-[2rem] lg:text-[2rem] font-bold rounded-[6px] py-2 px-4"
+                                                >
+                                                    {verbs[current].infinitive}
+                                                </span>
+                                                <span><SpeakButton text={verbs[current].infinitive} /></span>
+                                            </div>
                                             <span
                                                 className="text-[0.75rem] md:text-[1rem] lg:text-[1rem] bg-[#F2B441] rounded-[6px] font-bold py-2 px-4"
                                             >

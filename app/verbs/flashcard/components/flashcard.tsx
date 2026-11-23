@@ -82,7 +82,10 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
                     >
                         <div>
                             <div className="flex place-items-center gap-2">
-                                <h2 className="text-[1.75rem] md:text-[2.25rem] lg:text-[2.25rem] bg-[#000000] text-[#FFFDF7] rounded-[6px] py-2 px-4 place-items-center font-bold">{currentVerb?.infinitive}</h2>
+                                <span className="text-[0.75rem] md:text-[2.25rem] lg:text-[2.25rem] bg-[#000000] text-[#FFFDF7] rounded-[6px] py-2 px-4 place-items-center font-bold">
+                                    {currentVerb?.infinitive}
+                                </span>
+                                <span><SpeakButton text={currentVerb?.infinitive ?? ""} /></span>
                             </div>
                             <p className="text-[#637789] text-[1.25rem] md:text-[1.25rem] lg:text-[1.25rem]">{currentVerb?.translation}</p>
                         </div>
@@ -100,34 +103,58 @@ const Flashcard = ({ tenses, verbs }: FlashcardProps) => {
                                     className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-3 md:text-[1rem] lg:text-[1rem] text-[0.75rem]"
                                 >
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                        className="flex justify-between place-items-center border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
-                                        <span>Yo</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.yo}</span></span>
+                                        <span>Yo</span> 
+                                        <span className="flex place-items-center gap-2">
+                                            <span className="font-bold">{currentConjugations.yo}</span>
+                                            <span><SpeakButton text={currentConjugations.yo} /></span>
+                                        </span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                        className="flex justify-between place-items-center border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
-                                        <span>Tú</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.tu}</span></span>
+                                        <span>Tú</span> 
+                                        <span className="flex place-items-center gap-2">
+                                            <span className="font-bold">{currentConjugations.tu}</span>
+                                            <span><SpeakButton text={currentConjugations.tu} /></span>
+                                        </span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                        className="flex justify-between place-items-center border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
-                                        <span>Él/Ella/Usted</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.el}</span></span>
+                                        <span>Él/Ella/Usted</span> 
+                                        <span className="flex place-items-center gap-2">
+                                            <span className="font-bold">{currentConjugations.el}</span>
+                                            <span><SpeakButton text={currentConjugations.el} /></span>
+                                        </span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                        className="flex justify-between place-items-center border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
-                                        <span>Nosotros/Nosotras</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.nosotros}</span></span>
+                                        <span>Nosotros/Nosotras</span> 
+                                        <span className="flex place-items-center gap-2">
+                                            <span className="font-bold">{currentConjugations.nosotros}</span>
+                                            <span><SpeakButton text={currentConjugations.nosotros} /></span>
+                                        </span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                        className="flex justify-between place-items-center border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
-                                        <span>Vosotros/Vosotras</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.vosotros}</span></span>
+                                        <span>Vosotros/Vosotras</span> 
+                                        <span className="flex place-items-center gap-2">
+                                            <span className="font-bold">{currentConjugations.vosotros}</span>
+                                            <span><SpeakButton text={currentConjugations.vosotros} /></span>
+                                        </span>
                                     </li>
                                     <li
-                                        className="flex justify-between border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
+                                        className="flex justify-between place-items-center border-[0.5px] border-gray-300 bg-[#FFF8EB] rounded-[6px] p-4"
                                     >
-                                        <span>Ellos/Ellas/Ustedes</span> <span className="flex place-items-center gap-2"><span className="font-bold">{currentConjugations.ellos}</span></span>
+                                        <span>Ellos/Ellas/Ustedes</span> 
+                                        <span className="flex place-items-center gap-2">
+                                            <span className="font-bold">{currentConjugations.ellos}</span>
+                                            <span><SpeakButton text={currentConjugations.ellos} /></span>
+                                        </span>
                                     </li>
                                 </ul>
                             ) : null

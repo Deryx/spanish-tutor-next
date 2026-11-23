@@ -64,11 +64,16 @@ const Flashcard = ({ categories, entries }: FlashcardProps ) => {
         onRightButtonClick={handleRightButtonClick}
       >
         <div className="flex flex-col place-items-center">
-          <p
-            className="text-[1.5rem] md:text-[3rem] lg:text-[3rem] px-4 pb-2 bg-[#000000] text-[#FFFAF2] rounded-[6px] font-bold"
-          >
-              {studySet[currentEntry]?.wordText}
-          </p>
+          <div className="flex place-items-center gap-2">
+            <p
+              className="text-[1.5rem] md:text-[3rem] lg:text-[3rem] px-4 pb-2 bg-[#000000] text-[#FFFAF2] rounded-[6px] font-bold"
+            >
+                {studySet[currentEntry]?.wordText}
+            </p>
+            <span className="ml-1">
+              <SpeakButton text={studySet[currentEntry]?.wordText ?? ""} />
+            </span>
+          </div>
           <p
             className="text-[0.75rem] md:text-[1.5rem] lg:text-[1.5rem] text-[#637789]"
           >
