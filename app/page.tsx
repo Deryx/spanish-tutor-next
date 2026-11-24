@@ -80,7 +80,7 @@ const HomePage = () => {
             >
               <a
                 href="#Verbs"
-                className="bg-[#17324D] text-[1.25rem] font-semibold rounded-[6px] py-2 px-8"
+                className="bg-[#17324D] text-[0.9rem] md:text-[1.25rem] lg:text-[1.25rem] font-semibold rounded-[6px] py-2 px-8"
                 style={{
                   color: "#fff8eb"
                 }}
@@ -89,7 +89,7 @@ const HomePage = () => {
               </a>
               <a
                 href="#Vocabulary"
-                className="text-[1.25rem] bg-[#FFFaF2] border-[0.5px] border-[#84929f] font-semibold rounded-[6px] py-2 px-8"
+                className="text-[0.9rem] md:text-[1.25rem] lg:text-[1.25rem] bg-[#FFFaF2] border-[0.5px] border-[#84929f] font-semibold rounded-[6px] py-2 px-8"
                 style={{
                   color: "#17324D",
                 }}
@@ -98,27 +98,20 @@ const HomePage = () => {
               </a>
             </div>
 
-            <div
-              className="grid grid-cols-3 gap-1 mt-5"
-            >
-              <div className="border-r border-[#84929f]">
-                <p className="text-[2rem] font-bold">106</p>
-                <p className="text-[1rem] text-[#637789] font-semibold">COMMON VERBS</p>
-              </div>
-              <div
-                className="border-r border-[#84929f]"
-                style={{ paddingLeft: "5px" }}
-              >
-                <p className="text-[2rem] font-bold">1,000+</p>
-                <p className="text-[1rem] text-[#637789] font-semibold">COMMON WORDS</p>
-              </div>
-              <div
-                style={{ paddingLeft: "5px" }}
-              >
-                <p className="text-[2rem] font-bold">9</p>
-                <p className="text-[1rem] text-[#637789] font-semibold">ACTIVITIES</p>
-              </div>
+          <div className="grid grid-cols-3 gap-1 mt-5">
+            <div className="border-r border-[#84929f] w-full flex flex-col items-center text-center">
+              <p className="text-[1.5rem] md:text-[2rem] font-bold">106</p>
+              <p className="text-[1rem] text-[#637789] font-semibold">COMMON VERBS</p>
             </div>
+            <div className="border-r border-[#84929f] w-full flex flex-col items-center text-center">
+              <p className="text-[1.5rem] md:text-[2rem] font-bold">1,000+</p>
+              <p className="text-[1rem] text-[#637789] font-semibold">COMMON WORDS</p>
+            </div>
+            <div className="w-full flex flex-col items-center text-center">
+              <p className="text-[1.5rem] md:text-[2rem] font-bold">9</p>
+              <p className="text-[1rem] text-[#637789] font-semibold">ACTIVITIES</p>
+            </div>
+          </div>
           </section>
 
           <div
