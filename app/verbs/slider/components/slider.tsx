@@ -367,9 +367,9 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                         </div>
                                         {showAnswer && (
                                             <div>
-<div>{answerText}</div>
-<div className="mt-3"><SpeakButton text={keys.map((key) => correctAnswers[currentQuestion]?.[key] ?? "").filter((form) => form !== "—").join(", ")} label="Listen to the forms" /></div>
-</div>
+                                                <div>{answerText}</div>
+                                                    <div className="mt-3"><SpeakButton text={keys.map((key) => correctAnswers[currentQuestion]?.[key] ?? "").filter((form) => form !== "—").join(", ")} label="Listen to the forms" /></div>
+                                                </div>
                                         )}
 
                                     </>
@@ -416,7 +416,7 @@ const Slider = ({ tenses, verbs }: SliderProps) => {
                                                     const isCorrect = userAnswer === answer;
 
                                                     return (
-                                                        <div className="flex flex-col justify-center border-l-[3px] border-l-[#026440] bg-[#d2f8d2] h-10 text-[0.75rem] md:text-[1rem] lg:text-[1rem] font-bold mt-6 mb-4">
+                                                        <div className="flex flex-col justify-center h-10 text-[0.75rem] md:text-[1rem] lg:text-[1rem] font-bold mt-6 mb-4">
                                                             <div className="text-gray-400">{keys[answerIndex]}</div>
                                                             <div
                                                                 key={`${answer}-${answerIndex}`}
